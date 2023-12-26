@@ -1,0 +1,21 @@
+- Make default site template
+
+- Make login page
+	- Database for storing users
+	- User authentication
+		- Register
+		- Login
+		- Users levels (Normal, Power, Admin)
+
+- Make profile management page
+	- Change password
+	- Add/Change profile picture
+
+- Quiz page
+	- Table in DB for storing Quizzes
+	- Display all quizzes, with categry
+
+- Quiz Creation page
+
+- Current quiz result page
+
