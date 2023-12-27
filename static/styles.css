@@ -14,8 +14,15 @@
 body {
   display: flex;
   flex-direction: column;
-  height: 100vw;
+  align-items: center;
+  height: 100vh;
   background-color: var(--darkgray);
+}
+
+/* Text */
+h2 {
+  font-size: 3rem;
+  margin: 0 200px 0 200px;
 }
 
 /* Navbar */
@@ -24,10 +31,12 @@ nav {
   justify-content: center;
   align-items: center;
   height: 100%;
+  width: 100vw;
   background: linear-gradient(to bottom, var(--lightgray), var(--darkgray));
   border-bottom: 1px solid var(--darkgray);
 }
 
+/* Line breaks */
 .break-dark {
   width: 1px;
   height: 100%;
@@ -40,22 +49,31 @@ nav {
   background-color: var(--lightgray);
 }
 
+/* Nav main panel */
 .nav-main {
   list-style-type: none;
   display: flex;
   height: 100%;
 }
 
-.main-btn {
-  padding: 15px 20px;
+.main-item {
+  display: flex;
+  align-items: center;
 }
 
 .nav-main a {
   color: white;
   text-decoration-line: none;
+  padding: 15px 20px;
   height: 100%;
 }
 
+.nav-main a:hover {
+  background: linear-gradient(to top, var(--lightgray), var(--darkgray));
+}
+
+
+/* Nav side panel */
 .nav-side {
  list-style-type: none;
  display: flex;
@@ -64,14 +82,33 @@ nav {
  right: 20px;
 }
 
-.side-btn {
+.side-item {
   margin: 0 10px;
-  padding: 10px 20px;
-  background-color: gray;
-  border-radius: 50px;
 }
 
 .nav-side a {
  color: white;
  text-decoration-line: none;
+ background-color: gray;
+ padding: 8px 15px;
+ border: 1px solid var(--darkgray);
+ border-radius: 50px;
+}
+
+.nav-side a:hover {
+  background-color: var(--darkgray);
+  border: 1px solid var(--lightgray);
+  transition: all 0.3s ease;
+}
+
+/* Main */
+main {
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  height: 100%;
+  background-color: var(--lightgray);
+  margin: 50px 0 10px 0;
+  border-radius: 20px;
+  border: 1px solid black;
 }

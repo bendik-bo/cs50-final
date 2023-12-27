@@ -1,0 +1,18 @@
+Install Python
+Add Python extention to VSCode
+
+Install Flask:
+Create environment:
+cd <project>
+py -3 -m venv .venv
+.venv\Scripts\activate
+
+pip install Flask
+pip install Flask-Session
+
+Install SQlite3:
+DL: sqlite-dll-win-x64-3440200.zip, sqlite-tools-win-x64-3440200.zip
+
+Place in C:\sqlite3
+Add PATH
+
