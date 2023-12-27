@@ -6,106 +6,72 @@
   font-size: 16px;
 }
 
+:root {
+  --lightgray: rgb(109, 109, 109);
+  --darkgray: rgb(73, 73, 73);
+}
+
 body {
   display: flex;
-  align-items: center;
   flex-direction: column;
-  margin: 20px 0;
+  height: 100vw;
+  background-color: var(--darkgray);
 }
-
-
-/* Text */
-h1 {
-  text-align: center;
-  font-family: "Nova Square", sans-serif;
-  font-size: 80px;
-  padding-bottom: 20px;
-}
-
-h2 {
-  text-align: center;
-  font-family: "Nova Square", sans-serif;
-  font-size: 3rem;
-  padding-bottom: 20px;
-}
-
-/* Header */
-.banner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 700px;
-  height: 170px;
-  margin: 0 auto;
-  border-radius: 50px 50px 0 0;
-  border: solid 3px rgb(102, 102, 102);
-  background-color: gray;
-}
-
 
 /* Navbar */
-/* .nav-faded-line {
-  width: 100vw;
-  height: 60px;
-  background-image: linear-gradient(to right, transparent, gray, transparent);
+nav {
   display: flex;
   justify-content: center;
-} */
-
-.navbar {
-  width: 100%;
-  height: 100%;
-  max-width: 700px;
-  background-color: rgb(151, 151, 151);
-}
-
-.nav-list {
-  display: flex;
-  justify-content: space-evenly;
   align-items: center;
-  width: 100%;
   height: 100%;
-  list-style-type: none;
+  background: linear-gradient(to bottom, var(--lightgray), var(--darkgray));
+  border-bottom: 1px solid var(--darkgray);
 }
 
-.nav-btn {
+.break-dark {
+  width: 1px;
+  height: 100%;
+  background-color: var(--darkgray);
+}
+
+.break-light {
+  width: 1px;
+  height: 100%;
+  background-color: var(--lightgray);
+}
+
+.nav-main {
   list-style-type: none;
-  background-color: yellow;
-  width: 100px;
-  height: 40px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 10px;
-  margin: 10px 0;
+  height: 100%;
 }
 
-.nav-btn:hover {
+.main-btn {
+  padding: 15px 20px;
+}
+
+.nav-main a {
   color: white;
-  background-color: blue;
-  transition: 0.3s;
+  text-decoration-line: none;
+  height: 100%;
 }
 
+.nav-side {
+ list-style-type: none;
+ display: flex;
+ margin-left: auto;
+ position: absolute;
+ right: 20px;
+}
 
-/* Main */
-main {
-  max-width: 700px;
+.side-btn {
+  margin: 0 10px;
+  padding: 10px 20px;
   background-color: gray;
-  padding: 50px;
-  border: solid 3px rgb(102, 102, 102);
+  border-radius: 50px;
 }
 
-
-/* Footer */
-footer {
-  background-color: rgb(75, 75, 75);
-  height: 50px;
-  width: 700px;
-  border-radius: 0 0 50px 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-width: 0 3px 3px 3px;
-  border-style: solid;
-  border-color: gray;
+.nav-side a {
+ color: white;
+ text-decoration-line: none;
 }
