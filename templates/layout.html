@@ -10,7 +10,7 @@
       href="https://fonts.googleapis.com/css2?family=Nova+Square&display=swap"
       rel="stylesheet"
     />
-    <title>{% block title %}Title{% endblock %}</title>
+    <title>{% block title %}{% endblock %}</title>
   </head>
   <body>
     <header>
@@ -38,9 +38,7 @@
       </nav>
     </header>
     <main>
-      <!-- {% block main %} -->
-      <h2>Hello</h2>
-      <!-- {% endblock %} -->
+      {% block main %}{% endblock %}
     </main>
     <footer>
       <h4>Text goes here</h4>
