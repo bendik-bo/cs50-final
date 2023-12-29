@@ -9,6 +9,13 @@
 :root {
   --lightgray: rgb(109, 109, 109);
   --darkgray: rgb(73, 73, 73);
+
+  --rose: #F72585;
+  --grape: #7209B7;
+  --zaffre: #3A0CA3;
+  --neonblue: #4361EE;
+  --vividskyblue: #4CC9F0;
+  --pureblue: #007bff;
 }
 
 body {
@@ -16,13 +23,13 @@ body {
   flex-direction: column;
   align-items: center;
   height: 100vh;
-  background-color: var(--darkgray);
+  background: linear-gradient(to top, #3790ac, var(--vividskyblue));
 }
 
 /* Text */
 h2 {
   font-size: 3rem;
-  margin: 0 200px 0 200px;
+  color: white;
 }
 
 /* Navbar */
@@ -107,15 +114,49 @@ main {
   flex-direction: column;
   align-items: center;
   max-width: 600px;
-  height: 100%;
   background-color: var(--lightgray);
   margin: 50px 0 10px 0;
   border-radius: 20px;
   border: 1px solid black;
+  padding: 30px 30px;
 }
 
-/* Fields */
+/* Input fields for login/signup */
 .field-wrapper {
   display: flex;
   flex-direction: column;
+  margin: 5px 10px;
+}
+
+.field-container {
+  display: flex;
+  flex-direction: column;
+  margin: 10px 0;
+}
+
+/* Label text */
+.label {
+  color: white;
+}
+
+/* Inputs */
+input {
+  background-color: rgb(184, 184, 184);
+  height: 1.8rem;
+  border-radius: 5px;
+  padding: 15px 5px;
+  margin-top: 5px;
+}
+input:focus {
+  background-color: rgb(233, 233, 233);
+  outline: 2px solid var(--pureblue);
+  transition: background-color 0.5s;
+}
+
+/* Buttons */
+.btn-login {
+  background-color: var(--neonblue);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
 }
