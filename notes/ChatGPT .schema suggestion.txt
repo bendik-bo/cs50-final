@@ -1,0 +1,47 @@
+-- Create a table for users
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY,
+    username TEXT UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    -- Add other user-related fields as needed
+);
+
+-- Create a table for quizzes
+CREATE TABLE quizzes (
+    id INTEGER PRIMARY KEY,
+    title TEXT NOT NULL,
+    creator_id INTEGER,
+    FOREIGN KEY (creator_id) REFERENCES users(id)
+    -- Add other quiz-related fields as needed
+);
+
+-- Create a table for questions
+CREATE TABLE questions (
+    id INTEGER PRIMARY KEY,
+    quiz_id INTEGER,
+    question_text TEXT NOT NULL,
+    -- Add other question-related fields as needed
+    FOREIGN KEY (quiz_id) REFERENCES quizzes(id)
+);
+
+-- Create a table for answers
+CREATE TABLE answers (
+    id INTEGER PRIMARY KEY,
+    question_id INTEGER,
+    answer_text TEXT NOT NULL,
+    is_correct BOOLEAN NOT NULL,
+    -- Add other answer-related fields as needed
+    FOREIGN KEY (question_id) REFERENCES questions(id)
+);
+
+-- Create a table for quiz results
+CREATE TABLE quiz_results (
+    id INTEGER PRIMARY KEY,
+    user_id INTEGER,
+    quiz_id INTEGER,
+    score INTEGER,
+    -- Add other result-related fields as needed
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (quiz_id) REFERENCES quizzes(id)
+);

@@ -10,11 +10,12 @@
   --lightgray: rgb(109, 109, 109);
   --darkgray: rgb(73, 73, 73);
 
-  --rose: #F72585;
-  --grape: #7209B7;
+  --nonphotoblue: #90E0EF;
+  --lightcyan: #CAF0F8;
   --zaffre: #3A0CA3;
-  --neonblue: #4361EE;
-  --vividskyblue: #4CC9F0;
+  --pacificcyan: #00B4D8;
+  --honolulublue: #0077B6;
+  --federalblue: #03045E;
   --pureblue: #007bff;
 }
 
@@ -23,7 +24,7 @@ body {
   flex-direction: column;
   align-items: center;
   height: 100vh;
-  background: linear-gradient(to top, #3790ac, var(--vividskyblue));
+  background: linear-gradient(to top, var(--honolulublue), var(--nonphotoblue));
 }
 
 /* Text */
@@ -118,20 +119,21 @@ main {
   margin: 50px 0 10px 0;
   border-radius: 20px;
   border: 1px solid black;
-  padding: 30px 30px;
+  padding: 20px 30px;
 }
 
-/* Input fields for login/signup */
-.field-wrapper {
+/* Input field for login/signup */
+.field-container {
   display: flex;
   flex-direction: column;
   margin: 5px 10px;
 }
 
-.field-container {
+.field-row {
   display: flex;
   flex-direction: column;
   margin: 10px 0;
+  gap: 5px;
 }
 
 /* Label text */
@@ -145,18 +147,31 @@ input {
   height: 1.8rem;
   border-radius: 5px;
   padding: 15px 5px;
-  margin-top: 5px;
+  outline: none;
 }
 input:focus {
   background-color: rgb(233, 233, 233);
-  outline: 2px solid var(--pureblue);
-  transition: background-color 0.5s;
+  /* outline: 2px solid var(--pureblue); */
+  box-shadow: 0 0 0 2px var(--pureblue);
+  transition: all 0.5s;
 }
 
 /* Buttons */
 .btn-login {
-  background-color: var(--neonblue);
+  background-color: var(--pureblue);
   color: white;
   padding: 5px 10px;
   border-radius: 5px;
+}
+
+/* Input field error message */
+.errorMessage {
+  display: block;
+  gap: 5px;
+  color: rgb(255, 0, 0);
+}
+
+/* Icons */
+.icon {
+  margin: 0 4px 0 4px;
 }
