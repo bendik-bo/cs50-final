@@ -23,20 +23,30 @@ def after_request(response):
     return response
 
 # Database
+DATABASE = "database.db"
+
 def get_db():
     """Establish database connection for request"""
-    if "db" not in g:
-        g.db = sqlite3.connect("database.db")
-        g.db.row_factory = sqlite3.Row
-    return g.db.cursor()
+    db = getattr(g, "_database", None)
+    if db is None:
+        db = g._database = sqlite3.connect(DATABASE)
+        db.row_factory = sqlite3.Row
+    return db
 
 @app.teardown_appcontext
 def close_db(exception):
     """Close database connection at end of request"""
-    if "db" in g:
-        g.db.close()
+    db = getattr(g, "_database", None)
+    if db is not None:
+        db.close()
 
+def query_db(query, args=(), one=False):
+    cur = get_db().execute(query, args)
+    rv = cur.fetchall()
+    cur.close()
+    return (rv[0] if rv else None) if one else rv
 
+# Main
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -51,31 +61,38 @@ def signup():
     """Register user"""
     if request.method == "POST":
         db = get_db()
+        username = request.form.get("username")
+        password = request.form.get("password")
+        confirm = request.form.get("confirm")
 
         # Empty username field
-        if not request.form.get("username"):
+        if not username:
             flash("Please fill in a username", "username")
-            return redirect("/signup")
+            return render_template("signup.html")
 
         # Username already taken
-        if db.execute("SELECT * FROM users WHERE username = ?", [request.form.get("username")]).fetchone():
+        if query_db("SELECT * FROM users WHERE username = ?", [username]):
             flash("Username already exists", "username")
-            return redirect("/signup")
+            return render_template("signup.html", username=username)
 
         # Empty password field
-        if not request.form.get("password") or not request.form.get("confirm"):
-            flash("Fill in both password-fields", "password")
-            return redirect("/signup")
+        if not password or not confirm:
+            flash("Fill in both password-fields.", "password")
+            return render_template("signup.html", username=username)
 
         # Password mismatch
-        if request.form.get("password") != request.form.get("confirm"):
-            flash("Passwords do not match", "password")
-            return redirect("/signup")
+        if password != confirm:
+            flash("Passwords do not match.", "password")
+            return render_template("signup.html", username=username)
 
         # Insert user into database
-        # db.execute("INSERT INTO users (username, hash) VALUES (?, ?)", request.form.get("username"), generate_password_hash(request.form.get("password")))
+        query_db("INSERT INTO users (username, password_hash) VALUES (?, ?)", [username, generate_password_hash(password)])
+        db.commit()
 
         return redirect("/")
 
     else:
         return render_template("signup.html")
+    
+if __name__ == "__main__":
+    app.run(debug=True)
