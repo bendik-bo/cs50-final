@@ -58,6 +58,42 @@ def insert_db(query, args=()):
 def index():
     return render_template("index.html")
 
+@app.route("/signup", methods=["GET", "POST"])
+def signup():
+    """Register user"""
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+        confirm = request.form.get("confirm")
+
+        # Empty username field
+        if not username:
+            flash("Please fill in a username", "username")
+            return render_template("signup.html")
+
+        # Username already taken
+        if query_db("SELECT * FROM users WHERE username = ?", [username]):
+            flash("Username already exists", "username")
+            return render_template("signup.html", username=username)
+
+        # Empty password field
+        if not password or not confirm:
+            flash("Fill in both password-fields.", "password")
+            return render_template("signup.html", username=username)
+
+        # Password mismatch
+        if password != confirm:
+            flash("Passwords do not match.", "password")
+            return render_template("signup.html", username=username)
+
+        # Insert user into database
+        insert_db("INSERT INTO users (username, password_hash) VALUES (?, ?)", [username, generate_password_hash(password)])
+
+        return redirect("/")
+
+    else:
+        return render_template("signup.html")
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     """Log user in"""
@@ -94,42 +130,13 @@ def login():
 
     else:
         return render_template("login.html")
-
-@app.route("/signup", methods=["GET", "POST"])
-def signup():
-    """Register user"""
-    if request.method == "POST":
-        username = request.form.get("username")
-        password = request.form.get("password")
-        confirm = request.form.get("confirm")
-
-        # Empty username field
-        if not username:
-            flash("Please fill in a username", "username")
-            return render_template("signup.html")
-
-        # Username already taken
-        if query_db("SELECT * FROM users WHERE username = ?", [username]):
-            flash("Username already exists", "username")
-            return render_template("signup.html", username=username)
-
-        # Empty password field
-        if not password or not confirm:
-            flash("Fill in both password-fields.", "password")
-            return render_template("signup.html", username=username)
-
-        # Password mismatch
-        if password != confirm:
-            flash("Passwords do not match.", "password")
-            return render_template("signup.html", username=username)
-
-        # Insert user into database
-        insert_db("INSERT INTO users (username, password_hash) VALUES (?, ?)", [username, generate_password_hash(password)])
-
-        return redirect("/")
-
-    else:
-        return render_template("signup.html")
     
+@app.route("/logout")
+def logout():
+    """Log user out"""
+    session.clear()
+
+    return redirect("/")
+
 if __name__ == "__main__":
     app.run(debug=True)

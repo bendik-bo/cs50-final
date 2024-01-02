@@ -10,7 +10,10 @@
       href="https://fonts.googleapis.com/css2?family=Nova+Square&display=swap"
       rel="stylesheet"
     />
-    <script src="https://kit.fontawesome.com/2728954237.js" crossorigin="anonymous"></script>
+    <script
+      src="https://kit.fontawesome.com/2728954237.js"
+      crossorigin="anonymous"
+    ></script>
     <title>{% block title %}{% endblock %}</title>
   </head>
   <body>
@@ -32,15 +35,19 @@
           <div class="break-dark"></div>
           <div class="break-light"></div>
         </ul>
+        {% if session["user_id"] %}
+        <ul class="nav-side">
+          <li class="side-item"><a href="/logout">Log out</a></li>
+        </ul>
+        {% else %}
         <ul class="nav-side">
           <li class="side-item"><a href="/login">Log in</a></li>
           <li class="side-item"><a href="/signup">Sign up</a></li>
         </ul>
+        {% endif %}
       </nav>
     </header>
-    <main>
-      {% block main %}{% endblock %}
-    </main>
+    <main>{% block main %}{% endblock %}</main>
     <footer>
       <h4>Text goes here</h4>
     </footer>
