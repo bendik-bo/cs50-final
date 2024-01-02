@@ -41,10 +41,17 @@ def close_db(exception):
         db.close()
 
 def query_db(query, args=(), one=False):
+    """Query the database"""
     cur = get_db().execute(query, args)
     rv = cur.fetchall()
     cur.close()
     return (rv[0] if rv else None) if one else rv
+
+def insert_db(query, args=()):
+    """Insert into the database"""
+    get_db().execute(query, args)
+    get_db().commit()
+    
 
 # Main
 @app.route("/")
@@ -54,13 +61,44 @@ def index():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     """Log user in"""
-    return render_template("login.html")
+
+    # Forget any user_id
+    session.clear()
+
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+
+        # Ensure username was submitted
+        if not username:
+            flash("Please fill in a username", "username")
+            return render_template("login.html")
+
+        # Ensure password was submitted
+        elif not password:
+            flash("Please fill in a password", "password")
+            return render_template("login.html", username=username)
+
+        # Query database for username
+        rows = query_db("SELECT * FROM users WHERE username = ?", [username])
+
+        # Ensure username exists and password is correct
+        if len(rows) != 1 or not check_password_hash(rows[0]["password_hash"], password):
+            flash("Incorrect username or password", "username")
+            return render_template("login.html", username=username)
+
+        # Remember which user has logged in
+        session["user_id"] = rows[0]["id"]
+
+        return redirect("/")
+
+    else:
+        return render_template("login.html")
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
     """Register user"""
     if request.method == "POST":
-        db = get_db()
         username = request.form.get("username")
         password = request.form.get("password")
         confirm = request.form.get("confirm")
@@ -86,8 +124,7 @@ def signup():
             return render_template("signup.html", username=username)
 
         # Insert user into database
-        query_db("INSERT INTO users (username, password_hash) VALUES (?, ?)", [username, generate_password_hash(password)])
-        db.commit()
+        insert_db("INSERT INTO users (username, password_hash) VALUES (?, ?)", [username, generate_password_hash(password)])
 
         return redirect("/")
 

@@ -1,27 +1,43 @@
-{% extends "layout.html" %}
-
-{% block title %}
-    Log in
-{% endblock %}
-
-{% block main %}
+{% extends "layout.html" %} {% block title %} Log in {% endblock %} {% block
+main %}
 <h2>Log in</h2>
 <form action="/login" method="POST">
-    <div class="field-container">
-        <div class="field-row">
-            <label class="label" for="username">Username:</label>
-            <input autocomplete="off" autofocus class="field" id="username" name="username" type="text">
-        </div>
-        <div class="field-row">
-            <label class="label" for="password">Password:</label>
-            <input id="password" class="field" name="password" type="password">
-        </div>
-        <div class="field-row">
-            <button class="btn-login" type="submit">Log in</button>
-        </div>
-        <div class="field-row">
-            <p>Don't have an account? Register <a href="/signup">here!</a></p>
-        </div>
+  <div class="field-container">
+    <div class="field-row">
+      <label class="label" for="username">Username:</label>
+      <input
+        autocomplete="off"
+        autofocus
+        class="field"
+        id="username"
+        name="username"
+        type="text"
+      />
     </div>
+    {% with error = get_flashed_messages(category_filter=["username"]) %} {% if
+    error %}
+    <span class="errorMessage"
+      ><i class="fas fa-exclamation-triangle icon"></i>{{ error | join(" ")
+      }}</span
+    >
+    {% endif %} {% endwith %}
+    <div class="field-row">
+      <label class="label" for="password">Password:</label>
+      <input id="password" class="field" name="password" type="password" />
+    </div>
+    {% with error = get_flashed_messages(category_filter=["password"]) %} {% if
+    error %}
+    <span class="errorMessage"
+      ><i class="fas fa-exclamation-triangle icon"></i>{{ error | join(" ")
+      }}</span
+    >
+    {% endif %} {% endwith %}
+    <div class="field-row">
+      <button class="btn-login" type="submit">Log in</button>
+    </div>
+    <div class="field-row">
+      <p>Don't have an account? Register <a href="/signup">here!</a></p>
+    </div>
+  </div>
 </form>
 {% endblock %}

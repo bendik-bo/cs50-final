@@ -1,40 +1,46 @@
-{% extends "layout.html" %}
-
-{% block title %}
-    Sign up
-{% endblock %}
-
-{% block main %}
+{% extends "layout.html" %} {% block title %} Sign up {% endblock %} {% block
+main %}
 <h2>Sign up</h2>
 <form action="/signup" method="POST">
-    <div class="field-container">
-        <div class="field-row">
-            <label class="label" for="username">Username:</label>
-            <input autocomplete="off" autofocus class="field" name="username" type="text" value="{{ username }}">
-            {% with error = get_flashed_messages(category_filter=["username"]) %}
-                {% if error %}
-                    <span class="errorMessage"><i class="fas fa-exclamation-triangle icon"></i>{{ error | join(" ") }}</span>
-                {% endif %}
-            {% endwith %}
-        </div>
-
-        <div class="field-row">
-            <label class="label" for="password">Password:</label>
-            <input autocomplete="off" class="field" name="password" type="password">
-        </div>
-
-        <div class="field-row">
-            <label class="label" for="confirm">Confirm password:</label>
-            <input autocomplete="off" class="field" name="confirm" type="password">
-        </div>
-        {% with error = get_flashed_messages(category_filter=["password"]) %}
-            {% if error %}
-                <span class="errorMessage"><i class="fas fa-exclamation-triangle icon"></i>{{ error | join(" ") }}</span>
-            {% endif %}
-        {% endwith %}
-        <div class="field-row">
-            <button class="btn-login" type="submit">Sign up!</button>
-        </div>
+  <div class="field-container">
+    <div class="field-row">
+      <label class="label" for="username">Username:</label>
+      <input
+        autocomplete="off"
+        autofocus
+        class="field"
+        name="username"
+        type="text"
+        value="{{ username }}"
+      />
+      {% with error = get_flashed_messages(category_filter=["username"]) %} {%
+      if error %}
+      <span class="errorMessage"
+        ><i class="fas fa-exclamation-triangle icon"></i>{{ error | join(" ")
+        }}</span
+      >
+      {% endif %} {% endwith %}
     </div>
+
+    <div class="field-row">
+      <label class="label" for="password">Password:</label>
+      <input autocomplete="off" class="field" name="password" type="password" />
+    </div>
+
+    <div class="field-row">
+      <label class="label" for="confirm">Confirm password:</label>
+      <input autocomplete="off" class="field" name="confirm" type="password" />
+    </div>
+    {% with error = get_flashed_messages(category_filter=["password"]) %} {% if
+    error %}
+    <span class="errorMessage"
+      ><i class="fas fa-exclamation-triangle icon"></i>{{ error | join(" ")
+      }}</span
+    >
+    {% endif %} {% endwith %}
+    <div class="field-row">
+      <button class="btn-login" type="submit">Sign up!</button>
+    </div>
+  </div>
 </form>
 {% endblock %}
