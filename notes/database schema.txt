@@ -6,6 +6,6 @@ CREATE TABLE users (
 
 CREATE TABLE avatars (
 	user_id INTEGER NOT NULL,
-	avatar BLOB
+	avatar BLOB,
 	FOREIGN KEY(user_id) REFERENCES users(id)
 );
