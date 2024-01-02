@@ -4,3 +4,8 @@ CREATE TABLE users (
 	password_hash TEXT NOT NULL
 );
 
+CREATE TABLE avatars (
+	user_id INTEGER NOT NULL,
+	avatar BLOB
+	FOREIGN KEY(user_id) REFERENCES users(id)
+);
