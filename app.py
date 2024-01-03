@@ -1,18 +1,20 @@
 import os
-import sqlite3
 
 from flask import Flask, flash, redirect, render_template, request, session, g
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.utils import secure_filename
 
-from helpers import login_required
+from helpers import login_required, DATABASE, query_db, insert_db, allowed_file
+
+USER_IMAGES = "/static/images/user_avatars"
 
 app = Flask(__name__)
 
 # Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
-Session(app)
+app.config["USER_IMAGES"] = USER_IMAGES
 
 @app.after_request
 def after_request(response):
@@ -22,16 +24,6 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
-# Database
-DATABASE = "database.db"
-
-def get_db():
-    """Establish database connection for request"""
-    db = getattr(g, "_database", None)
-    if db is None:
-        db = g._database = sqlite3.connect(DATABASE)
-        db.row_factory = sqlite3.Row
-    return db
 
 @app.teardown_appcontext
 def close_db(exception):
@@ -40,19 +32,7 @@ def close_db(exception):
     if db is not None:
         db.close()
 
-def query_db(query, args=(), one=False):
-    """Query the database"""
-    cur = get_db().execute(query, args)
-    rv = cur.fetchall()
-    cur.close()
-    return (rv[0] if rv else None) if one else rv
-
-def insert_db(query, args=()):
-    """Insert into the database"""
-    get_db().execute(query, args)
-    get_db().commit()
-
-# Main
+# Main app
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -138,9 +118,44 @@ def logout():
     return redirect("/login")
 
 
-@app.route("/profile", methods=["GET", "POST"])
+@app.route("/profile", methods=["GET"])
+@login_required
 def profile():
+    """Access profile page"""
+
     return render_template("profile.html")
+
+@app.route("/upload", methods=["POST"])
+def upload():
+    """Upload image/avatar"""
+
+    if "file" not in request.files:
+        flash("No file part", "file")
+        return redirect(request.url)
+    
+    file = request.files["file"]
+
+    if file.filename == "":
+        flash("No selected image", "image")
+        return redirect(request.url)
+
+    if file and allowed_file(file.filename):
+        username = query_db("SELECT username FROM users WHERE id = ?", [session["user-id"]])
+        filetype = file.filename.rsplit(".", 1)[1]
+        file.filename = username + filetype
+        
+
+
+
+    if not allowed_file(image.filename):
+        flash("Invalid file type", "image")
+    
+    if file.content_length > (5 * 1024 * 1024):
+        flash("Image size exceeds the limit")
+        return redirect(request.url)
+    
+    if os.path.isdir("/static/images/user_avatars/" join ) 
+
 
 if __name__ == "__main__":
     app.run(debug=True)

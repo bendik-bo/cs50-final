@@ -176,7 +176,7 @@ input:focus {
 }
 
 /* Profile */
-.profile-pic {
+.avatar-container {
   border-radius: 100px;
   overflow: hidden;
 }

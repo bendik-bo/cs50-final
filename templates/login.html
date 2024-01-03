@@ -12,6 +12,7 @@ main %}
         id="username"
         name="username"
         type="text"
+        value="{{ username }}"
       />
     </div>
     {% with error = get_flashed_messages(category_filter=["username"]) %} {% if
