@@ -51,7 +51,6 @@ def insert_db(query, args=()):
     """Insert into the database"""
     get_db().execute(query, args)
     get_db().commit()
-    
 
 # Main
 @app.route("/")
@@ -89,7 +88,7 @@ def signup():
         # Insert user into database
         insert_db("INSERT INTO users (username, password_hash) VALUES (?, ?)", [username, generate_password_hash(password)])
 
-        return redirect("/")
+        return redirect("/login")
 
     else:
         return render_template("signup.html")

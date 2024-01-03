@@ -10,12 +10,12 @@
   --lightgray: rgb(109, 109, 109);
   --darkgray: rgb(73, 73, 73);
 
-  --nonphotoblue: #90E0EF;
-  --lightcyan: #CAF0F8;
-  --zaffre: #3A0CA3;
-  --pacificcyan: #00B4D8;
-  --honolulublue: #0077B6;
-  --federalblue: #03045E;
+  --nonphotoblue: #90e0ef;
+  --lightcyan: #caf0f8;
+  --zaffre: #3a0ca3;
+  --pacificcyan: #00b4d8;
+  --honolulublue: #0077b6;
+  --federalblue: #03045e;
   --pureblue: #007bff;
 }
 
@@ -80,14 +80,13 @@ nav {
   background: linear-gradient(to top, var(--lightgray), var(--darkgray));
 }
 
-
 /* Nav side panel */
 .nav-side {
- list-style-type: none;
- display: flex;
- margin-left: auto;
- position: absolute;
- right: 20px;
+  list-style-type: none;
+  display: flex;
+  margin-left: auto;
+  position: absolute;
+  right: 20px;
 }
 
 .side-item {
@@ -95,12 +94,12 @@ nav {
 }
 
 .nav-side a {
- color: white;
- text-decoration-line: none;
- background-color: gray;
- padding: 8px 15px;
- border: 1px solid var(--darkgray);
- border-radius: 50px;
+  color: white;
+  text-decoration-line: none;
+  background-color: gray;
+  padding: 8px 15px;
+  border: 1px solid var(--darkgray);
+  border-radius: 50px;
 }
 
 .nav-side a:hover {
@@ -174,4 +173,10 @@ input:focus {
 /* Icons */
 .icon {
   margin: 0 4px 0 4px;
+}
+
+/* Profile */
+.profile-pic {
+  border-radius: 100px;
+  overflow: hidden;
 }

@@ -9,3 +9,8 @@ CREATE TABLE avatars (
 	avatar BLOB,
 	FOREIGN KEY(user_id) REFERENCES users(id)
 );
+
+CREATE TABLE default_avatar (
+	image BLOB
+);
+
