@@ -7,11 +7,13 @@ from werkzeug.utils import secure_filename
 
 from helpers import login_required, DATABASE, query_db, insert_db, allowed_file
 
-USER_IMAGES = "/static/images/user_avatars"
+USER_IMAGES = "/static/images/users/avatar"
+MAX_AVATAR_SIZE = 5 * 1024 * 1024
 
 app = Flask(__name__)
 
 # Configure session to use filesystem (instead of signed cookies)
+app.config["SECRET_KEY"] = "nf0{8/%+8z0cd%$n[eq4ve7ab7)@6"
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 app.config["USER_IMAGES"] = USER_IMAGES
@@ -122,6 +124,9 @@ def logout():
 @login_required
 def profile():
     """Access profile page"""
+    test = query_db("SELECT username FROM users WHERE id = ?", [session["user_id"]])
+    print(test)
+    print(session["user_id"])
 
     return render_template("profile.html")
 
@@ -139,23 +144,19 @@ def upload():
         flash("No selected image", "image")
         return redirect(request.url)
 
-    if file and allowed_file(file.filename):
-        username = query_db("SELECT username FROM users WHERE id = ?", [session["user-id"]])
-        filetype = file.filename.rsplit(".", 1)[1]
-        file.filename = username + filetype
-        
+    if not allowed_file(file.filename):
+        flash("Invalid file type", "file")
 
-
-
-    if not allowed_file(image.filename):
-        flash("Invalid file type", "image")
-    
-    if file.content_length > (5 * 1024 * 1024):
-        flash("Image size exceeds the limit")
+    if file.content_length > MAX_AVATAR_SIZE:
+        flash("Image size exceeds the limit", "file")
         return redirect(request.url)
-    
-    if os.path.isdir("/static/images/user_avatars/" join ) 
 
+    if file:
+        username = query_db("SELECT username FROM users WHERE id = ?", [session["user_id"]], one=True)
+        filetype = file.filename.rsplit(".", 1)[1]
+        file.filename = username[0] + "." + filetype
+        file.save(os.path.join(app.config["USER_IMAGES"], file.filename))
+        
 
 if __name__ == "__main__":
     app.run(debug=True)
