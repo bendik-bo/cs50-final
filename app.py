@@ -7,7 +7,7 @@ from werkzeug.utils import secure_filename
 
 from helpers import login_required, DATABASE, query_db, insert_db, allowed_file
 
-USER_IMAGES = "/static/images/users/avatar"
+USER_IMAGES = "./static/images/users/"
 MAX_AVATAR_SIZE = 5 * 1024 * 1024
 
 app = Flask(__name__)
@@ -16,7 +16,7 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = "nf0{8/%+8z0cd%$n[eq4ve7ab7)@6"
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
-app.config["USER_IMAGES"] = USER_IMAGES
+app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024
 
 @app.after_request
 def after_request(response):
@@ -133,30 +133,39 @@ def profile():
 @app.route("/upload", methods=["POST"])
 def upload():
     """Upload image/avatar"""
-
-    if "file" not in request.files:
-        flash("No file part", "file")
-        return redirect(request.url)
     
-    file = request.files["file"]
-
-    if file.filename == "":
-        flash("No selected image", "image")
-        return redirect(request.url)
-
-    if not allowed_file(file.filename):
-        flash("Invalid file type", "file")
-
-    if file.content_length > MAX_AVATAR_SIZE:
-        flash("Image size exceeds the limit", "file")
-        return redirect(request.url)
-
-    if file:
-        username = query_db("SELECT username FROM users WHERE id = ?", [session["user_id"]], one=True)
-        filetype = file.filename.rsplit(".", 1)[1]
-        file.filename = username[0] + "." + filetype
-        file.save(os.path.join(app.config["USER_IMAGES"], file.filename))
+    if request.method == "POST":
+        if "file" not in request.files:
+            flash("No file part", "file")
+            return render_template("profile.html")
         
+        file = request.files["file"]
+
+        if file.filename == "":
+            flash("No selected image", "file")
+            return render_template("profile.html")
+
+        if not allowed_file(file.filename):
+            flash("Invalid file type", "file")
+            return render_template("profile.html")
+
+        if file.content_length > MAX_AVATAR_SIZE:
+            flash("Image size exceeds the limit", "file")
+            return render_template("profile.html")
+        
+        print(file.content_length)
+
+        if file:
+            username = query_db("SELECT username FROM users WHERE id = ?", [session["user_id"]], one=True)
+            filetype = file.filename.rsplit(".", 1)[1]
+            filename = secure_filename(username[0] + "." + filetype)
+            file.save(os.path.join(USER_IMAGES, filename))
+
+        flash("Upload successfull!", "file")
+        return render_template("profile.html")
+
+    else:
+        return render_template("profile.html")
 
 if __name__ == "__main__":
     app.run(debug=True)

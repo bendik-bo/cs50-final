@@ -163,13 +163,18 @@ input:focus {
   border-radius: 5px;
 }
 
-/* Input field error message */
+/* flash messages */
 .errorMessage {
   display: block;
   gap: 5px;
   color: rgb(255, 0, 0);
 }
 
+.successMessage {
+  display: block;
+  gap: 5px;
+  color: limegreen;
+}
 /* Icons */
 .icon {
   margin: 0 4px 0 4px;
