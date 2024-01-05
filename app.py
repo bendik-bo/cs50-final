@@ -50,19 +50,19 @@ def signup():
         confirm = request.form.get("confirm")
 
         if not username:
-            flash("Please fill in a username", "username")
+            flash("Please fill in a username", "failUsername")
             return render_template("signup.html")
 
         if query_db("SELECT * FROM users WHERE username = ?", [username]):
-            flash("Username already exists", "username")
+            flash("Username already exists", "failUsername")
             return render_template("signup.html", username=username)
 
         if not password or not confirm:
-            flash("Fill in both password-fields.", "password")
+            flash("Fill in both password-fields.", "failPassword")
             return render_template("signup.html", username=username)
 
         if password != confirm:
-            flash("Passwords do not match.", "password")
+            flash("Passwords do not match.", "failPassword")
             return render_template("signup.html", username=username)
 
         insert_db("INSERT INTO users (username, password_hash) VALUES (?, ?)", [username, generate_password_hash(password)])
@@ -88,12 +88,12 @@ def login():
 
         # Ensure username was submitted
         if not username:
-            flash("Please fill in a username", "username")
+            flash("Please fill in a username", "failUsername")
             return render_template("login.html")
 
         # Ensure password was submitted
         elif not password:
-            flash("Please fill in a password", "password")
+            flash("Please fill in a password", "failPassword")
             return render_template("login.html", username=username)
 
         # Query database for username
@@ -101,7 +101,7 @@ def login():
 
         # Ensure username exists and password is correct
         if len(rows) != 1 or not check_password_hash(rows[0]["password_hash"], password):
-            flash("Incorrect username or password", "username")
+            flash("Incorrect username or password", "failUsername")
             return render_template("login.html", username=username)
 
         # Remember which user has logged in
@@ -130,22 +130,23 @@ def profile():
     return render_template("profile.html", url=result["url"])
 
 @app.route("/upload", methods=["POST"])
+@login_required
 def upload():
     """Upload image/avatar"""
     
     if request.method == "POST":
         if "file" not in request.files:
-            flash("No file part", "file")
+            flash("No file part", "failUpload")
             return redirect("/profile")
         
         file = request.files["file"]
 
         if file.filename == "":
-            flash("No selected file", "file")
+            flash("No selected file", "failUpload")
             return redirect("/profile")
 
         if not allowed_file(file.filename):
-            flash("Invalid file type", "file")
+            flash("Invalid file type", "failUpload")
             return redirect("/profile")
 
         if file:
@@ -156,11 +157,11 @@ def upload():
             file.save(url)
             insert_db("UPDATE images SET url = ? WHERE user_id = ?", [url, session["user_id"]])
 
-            flash("Upload successfull!", "file")
+            flash("Upload successful", "successUpload")
             return redirect("/profile")
 
         else:
-            flash("Error uploading", "file")
+            flash("Error uploading", "failUpload")
             return render_template("profile.html")
 
     else:

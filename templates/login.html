@@ -15,24 +15,26 @@ main %}
         value="{{ username }}"
       />
     </div>
-    {% with error = get_flashed_messages(category_filter=["username"]) %} {% if
-    error %}
-    <span class="errorMessage"
-      ><i class="fas fa-exclamation-triangle icon"></i>{{ error | join(" ")
-      }}</span
-    >
-    {% endif %} {% endwith %}
+    {% with message = get_flashed_messages(category_filter=["failUsername"]) %} 
+    {% if message %}
+    <span class="failureMsg"
+      ><i class="fas fa-exclamation-triangle icon"></i>{{ message | join(" ")
+      }}
+    </span>
+    {% endif %}
+    {% endwith %}
     <div class="field-row">
       <label class="label" for="password">Password:</label>
       <input id="password" class="field" name="password" type="password" />
     </div>
-    {% with error = get_flashed_messages(category_filter=["password"]) %} {% if
-    error %}
-    <span class="errorMessage"
-      ><i class="fas fa-exclamation-triangle icon"></i>{{ error | join(" ")
-      }}</span
-    >
-    {% endif %} {% endwith %}
+    {% with message = get_flashed_messages(category_filter=["failPassword"]) %} 
+    {% if message %}
+    <span class="failureMsg"
+      ><i class="fas fa-exclamation-triangle icon"></i>{{ message | join(" ")
+      }}
+    </span>
+    {% endif %}
+    {% endwith %}
     <div class="field-row">
       <button class="btn-login" type="submit">Log in</button>
     </div>

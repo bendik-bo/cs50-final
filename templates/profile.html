@@ -1,18 +1,28 @@
 {% extends "layout.html" %} {% block title %} Profile {% endblock %} {% block
 main %}
 <div class="avatar-container">
-  <img src="{{ url }}" alt="Default profile picture" />
+  <img src="{{ url }}" id="profile-avatar" alt="Default profile picture" />
 </div>
 <form action="/upload" method="POST" enctype="multipart/form-data">
   <input type="file" name="file" />
   <button type="submit">Upload</button>
 </form>
 
-{% with error = get_flashed_messages(category_filter=["file"]) %} {% if error %}
-<span class="errorMessage"
-  ><i class="fas fa-exclamation-triangle icon"></i>{{ error | join(" ") }}</span
+{% with message = get_flashed_messages(category_filter=["failUpload"]) %} 
+{% if message %}
+<span class="failureMsg"
+  ><i class="fas fa-exclamation-triangle icon"></i>{{ message | join(" ") }}</span
 >
-{% endif %} {% endwith %}
+{% endif %}
+{% endwith %}
+
+{% with message = get_flashed_messages(category_filter=["successUpload"]) %} 
+{% if message %}
+<span class="successMsg"
+  ><i class="	fas fa-laugh icon"></i>{{ message | join(" ") }}</span
+>
+{% endif %}
+{% endwith %}
 <p>Max file size: 5MB</p>
 
 {% endblock %}

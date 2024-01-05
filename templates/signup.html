@@ -13,10 +13,10 @@ main %}
         type="text"
         value="{{ username }}"
       />
-      {% with error = get_flashed_messages(category_filter=["username"]) %} {%
-      if error %}
-      <span class="errorMessage"
-        ><i class="fas fa-exclamation-triangle icon"></i>{{ error | join(" ")
+      {% with message = get_flashed_messages(category_filter=["failUsername"]) %} {%
+      if message %}
+      <span class="failureMsg"
+        ><i class="fas fa-exclamation-triangle icon"></i>{{ message | join(" ")
         }}</span
       >
       {% endif %} {% endwith %}
@@ -31,10 +31,10 @@ main %}
       <label class="label" for="confirm">Confirm password:</label>
       <input autocomplete="off" class="field" name="confirm" type="password" />
     </div>
-    {% with error = get_flashed_messages(category_filter=["password"]) %} {% if
-    error %}
-    <span class="errorMessage"
-      ><i class="fas fa-exclamation-triangle icon"></i>{{ error | join(" ")
+    {% with message = get_flashed_messages(category_filter=["failPassword"]) %} {% if
+    message %}
+    <span class="failureMsg"
+      ><i class="fas fa-exclamation-triangle icon"></i>{{ message | join(" ")
       }}</span
     >
     {% endif %} {% endwith %}
