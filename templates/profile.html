@@ -1,10 +1,7 @@
 {% extends "layout.html" %} {% block title %} Profile {% endblock %} {% block
 main %}
 <div class="avatar-container">
-  <img
-    src="/static/images/default/Default-profile.jpg"
-    alt="Default profile picture"
-  />
+  <img src="{{ url }}" alt="Default profile picture" />
 </div>
 <form action="/upload" method="POST" enctype="multipart/form-data">
   <input type="file" name="file" />
@@ -15,11 +12,7 @@ main %}
 <span class="errorMessage"
   ><i class="fas fa-exclamation-triangle icon"></i>{{ error | join(" ") }}</span
 >
-{% with error = get_flashed_messages(category_filter=["file"]) %} {% if error %}
-<span class="errorMessage"
-  ><i class="fas fa-exclamation-triangle icon"></i>{{ error | join(" ") }}</span
->
-{% endif %} {% endwith %} 
-
+{% endif %} {% endwith %}
 <p>Max file size: 5MB</p>
+
 {% endblock %}
