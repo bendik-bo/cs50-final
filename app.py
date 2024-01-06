@@ -28,7 +28,6 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
-
 @app.teardown_appcontext
 def close_db(exception):
     """Close database connection at end of request"""
@@ -44,6 +43,7 @@ def index():
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
     """Register user"""
+
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
@@ -51,7 +51,7 @@ def signup():
 
         if not username:
             flash("Please fill in a username", "failUsername")
-            return render_template("signup.html")
+            return redirect("/signup")
 
         if query_db("SELECT * FROM users WHERE username = ?", [username]):
             flash("Username already exists", "failUsername")
@@ -70,7 +70,7 @@ def signup():
         id = result["id"]
         insert_db("INSERT INTO images (user_id, url) VALUES (?, ?)", [id, DEFAULT_AVATAR])
 
-        return redirect("/login")
+        return render_template("login.html", username=username)
 
     else:
         return render_template("signup.html")
@@ -89,7 +89,7 @@ def login():
         # Ensure username was submitted
         if not username:
             flash("Please fill in a username", "failUsername")
-            return render_template("login.html")
+            return redirect("/login")
 
         # Ensure password was submitted
         elif not password:
@@ -115,8 +115,8 @@ def login():
 @app.route("/logout")
 def logout():
     """Log user out"""
-    session.clear()
 
+    session.clear()
     return redirect("/login")
 
 
@@ -126,7 +126,6 @@ def profile():
     """Access profile page"""
 
     result = query_db("SELECT url FROM images where user_id = ?", [session["user_id"]], one=True)
-
     return render_template("profile.html", url=result["url"])
 
 @app.route("/upload", methods=["POST"])
