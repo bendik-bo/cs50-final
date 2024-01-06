@@ -21,22 +21,29 @@ main %}
       >
       {% endif %} {% endwith %}
     </div>
-
     <div class="field-row">
       <label class="label" for="password">Password:</label>
-      <input autocomplete="off" class="field" name="password" type="password" />
+      <input 
+      autocomplete="off" 
+      class="field" 
+      name="password" 
+      type="password" 
+      />
     </div>
-
     <div class="field-row">
       <label class="label" for="confirm">Confirm password:</label>
-      <input autocomplete="off" class="field" name="confirm" type="password" />
+      <input 
+      autocomplete="off" 
+      class="field" 
+      name="confirm" 
+      type="password" />
     </div>
     {% with message = get_flashed_messages(category_filter=["failPassword"]) %} {% if
     message %}
     <span class="failureMsg"
       ><i class="fas fa-exclamation-triangle icon"></i>{{ message | join(" ")
-      }}</span
-    >
+      }}
+    </span>
     {% endif %} {% endwith %}
     <div class="field-row">
       <button class="btn-login" type="submit">Sign up!</button>

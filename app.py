@@ -53,16 +53,24 @@ def signup():
             flash("Please fill in a username", "failUsername")
             return redirect("/signup")
 
-        if query_db("SELECT * FROM users WHERE username = ?", [username]):
-            flash("Username already exists", "failUsername")
-            return render_template("signup.html", username=username)
-
         if not password or not confirm:
             flash("Fill in both password-fields.", "failPassword")
             return render_template("signup.html", username=username)
 
         if password != confirm:
             flash("Passwords do not match.", "failPassword")
+            return render_template("signup.html", username=username)
+        
+        if len(username) > 30 or len(username) < 3:
+            flash("Username must be between 3 and 20 characters long.", "failUsername")
+            return redirect("/signup")
+        
+        if len(password) < 8:
+            flash("Password must be atleast 8 characters long.", "failPassword")
+            return render_template("signup.html", username=username)
+  
+        if query_db("SELECT * FROM users WHERE username = ?", [username]):
+            flash("Username already exists", "failUsername")
             return render_template("signup.html", username=username)
 
         insert_db("INSERT INTO users (username, password_hash) VALUES (?, ?)", [username, generate_password_hash(password)])
