@@ -1,10 +1,12 @@
 {% extends "layout.html" %} {% block title %} Log in {% endblock %} {% block
 main %}
-<h2>Log in</h2>
+<h1>Log in</h1>
 <form action="/login" method="POST">
-  <div class="field-container">
+  <div class="container">
     <div class="field-row">
       <label class="label" for="username" value="{{ username }}">Username:</label>
+    </div>
+    <div class="field-row center">
       <input
         autocomplete="off"
         autofocus
@@ -25,6 +27,8 @@ main %}
     {% endwith %}
     <div class="field-row">
       <label class="label" for="password">Password:</label>
+    </div>
+    <div class="field-row center">
       <input 
         id="password" 
         class="field" 
@@ -39,11 +43,11 @@ main %}
     </span>
     {% endif %}
     {% endwith %}
-    <div class="field-row">
-      <button class="btn" type="submit">Log in</button>
+    <div class="field-row center">
+      <button class="field-btn" type="submit">Log in</button>
     </div>
-    <div class="field-row">
-      <p>Don't have an account? Register <a href="/signup">here!</a></p>
+    <div class="field-row center">
+      <p>Don't have an account? <a href="/signup">Register here!</a></p>
     </div>
   </div>
 </form>

@@ -1,6 +1,7 @@
 {% extends "layout.html" %} {% block title %} Profile {% endblock %} {% block
 main %}
-<div class="field-container">
+<h1>Profile</h1>
+<div class="container">
   <div class="field-row">
     <div class="avatar-container">
       <img src="{{ url }}" id="profile-avatar" alt="Default profile picture" />
@@ -31,7 +32,7 @@ main %}
   {% endwith %}
   <div class="field-row center"> 
     <form action="/changepass" method="GET">
-      <input type="submit" class="btn" value="Change password">
+      <input type="submit" class="field-btn" value="Change password">
     </form>
   </div>
 </div>

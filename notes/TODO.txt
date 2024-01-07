@@ -1,5 +1,5 @@
 Profile: 
-- Change password. New page/route(?)
+- Delete previous avatar when uploading new
 
 "Create Quiz" HTML:
 - Title
@@ -11,3 +11,4 @@ Profile:
 "Create Quiz" Route & DB
 
 
+Worked on making container and field-row more dynamic. Added .center
