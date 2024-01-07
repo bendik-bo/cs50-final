@@ -1,0 +1,55 @@
+{% extends "layout.html" %} 
+{% block title %} 
+Change password 
+{% endblock %} 
+{% block main %}
+<form action="/changepass" method="POST">
+    <div class="field-container">
+        <div class="field-row">
+            <label class="label" for="oldPass">Old password:</label>
+            <input
+                name="oldPass"
+                autocomplete="off"
+                autofocus
+                class="field"
+                type="password"
+            />
+            {% with message = get_flashed_messages(category_filter=["failOld"]) %} 
+            {% if message %}
+            <span class="failureMsg">
+                <i class="fas fa-exclamation-triangle icon"></i>{{ message | join(" ") }}
+            </span>
+            {% endif %} 
+            {% endwith %}
+        </div>
+        <div class="field-row">
+            <label class="label" for="password">New Password:</label>
+            <input 
+            name="password" 
+            autocomplete="off" 
+            class="field" 
+            type="password" 
+            />
+        </div>
+        <div class="field-row">
+            <label class="label" for="confirm">Confirm password:</label>
+            <input 
+            autocomplete="off" 
+            class="field" 
+            name="confirm" 
+            type="password" />
+        </div>
+        {% with message = get_flashed_messages(category_filter=["failNew"]) %} 
+        {% if message %}
+        <span class="failureMsg">
+            <i class="fas fa-exclamation-triangle icon"></i>{{ message | join(" ") }}
+        </span>
+        {% endif %} 
+        {% endwith %}
+        <div class="field-row">
+            <button class="btn" type="submit">Change</button>
+        </div>
+    </div>
+</form>
+{% endblock %}
+    

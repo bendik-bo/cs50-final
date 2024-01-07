@@ -4,8 +4,8 @@ main %}
   <img src="{{ url }}" id="profile-avatar" alt="Default profile picture" />
 </div>
 <form action="/upload" method="POST" enctype="multipart/form-data">
-  <input type="file" name="file" />
-  <button type="submit">Upload</button>
+  <input type="file" name="file" id="upload" />
+  <button type="submit" id="upload-btn">Upload</button>
 </form>
 
 {% with message = get_flashed_messages(category_filter=["failUpload"]) %} 

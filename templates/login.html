@@ -25,7 +25,11 @@ main %}
     {% endwith %}
     <div class="field-row">
       <label class="label" for="password">Password:</label>
-      <input id="password" class="field" name="password" type="password" />
+      <input 
+        id="password" 
+        class="field" 
+        name="password" 
+        type="password" />
     </div>
     {% with message = get_flashed_messages(category_filter=["failPassword"]) %} 
     {% if message %}
