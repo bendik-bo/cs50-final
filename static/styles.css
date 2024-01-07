@@ -121,18 +121,20 @@ main {
   padding: 20px 30px;
 }
 
-/* Input field for login/signup */
-.field-container {
-  display: flex;
-  flex-direction: column;
-  margin: 5px 10px;
+.center {
+  justify-content: center;
 }
 
-.field-row {
+/* Input field for login/signup */
+.column {
   display: flex;
   flex-direction: column;
-  margin: 10px 0;
   gap: 5px;
+  }
+
+.row {
+  display: flex;
+  flex-direction: row;
 }
 
 /* Label text */
@@ -156,11 +158,17 @@ input:focus {
 }
 
 /* Buttons */
-.btn-login {
+.btn {
   background-color: var(--pureblue);
   color: white;
   padding: 5px 10px;
   border-radius: 5px;
+  border: solid 1px var(--darkgray);
+}
+
+.btn:hover {
+  border: solid 1px white;
+  transition: all 0.5s ease-out;
 }
 
 /* flash messages */
@@ -185,6 +193,9 @@ input:focus {
   border: solid 3px white;
   border-radius: 100px;
   overflow: hidden;
+  width: fit-content;
+  height: fit-content;
+  margin: auto;
 }
 
 #profile-avatar {

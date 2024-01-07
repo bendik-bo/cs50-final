@@ -1,29 +1,38 @@
 {% extends "layout.html" %} {% block title %} Profile {% endblock %} {% block
 main %}
-<div class="avatar-container">
-  <img src="{{ url }}" id="profile-avatar" alt="Default profile picture" />
+<div class="field-container">
+  <div class="field-row">
+    <div class="avatar-container">
+      <img src="{{ url }}" id="profile-avatar" alt="Default profile picture" />
+    </div>
+  </div>
+  <div class="field-row"> 
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+      <input type="file" name="file" id="upload" />
+      <button type="submit" id="upload-btn">Upload</button>
+    </form>
+  </div>
+  <div class="field-row"> 
+    <p>Max file size: 5MB</p>
+  </div>
+  {% with message = get_flashed_messages(category_filter=["failUpload"]) %} 
+    {% if message %}
+      <span class="failureMsg">
+        <i class="fas fa-exclamation-triangle icon"></i>{{ message | join(" ") }}
+      </span>
+    {% endif %}
+  {% endwith %}
+  {% with message = get_flashed_messages(category_filter=["success"]) %} 
+    {% if message %}
+  <span class="successMsg">
+    <i class="	fas fa-laugh icon"></i>{{ message | join(" ") }}
+  </span>
+    {% endif %}
+  {% endwith %}
+  <div class="field-row center"> 
+    <form action="/changepass" method="GET">
+      <input type="submit" class="btn" value="Change password">
+    </form>
+  </div>
 </div>
-<form action="/upload" method="POST" enctype="multipart/form-data">
-  <input type="file" name="file" id="upload" />
-  <button type="submit" id="upload-btn">Upload</button>
-</form>
-<p>Max file size: 5MB</p>
-
-{% with message = get_flashed_messages(category_filter=["failUpload"]) %} 
-{% if message %}
-<span class="failureMsg"
-  ><i class="fas fa-exclamation-triangle icon"></i>{{ message | join(" ") }}</span
->
-{% endif %}
-{% endwith %}
-
-{% with message = get_flashed_messages(category_filter=["success"]) %} 
-{% if message %}
-<span class="successMsg"
-  ><i class="	fas fa-laugh icon"></i>{{ message | join(" ") }}</span
->
-{% endif %}
-{% endwith %}
-<a href="/changepass"><h3>Change password</h3></a>
-
 {% endblock %}

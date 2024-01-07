@@ -155,16 +155,19 @@ def changepass():
             return redirect("/changepass")
 
         if not password or not confirm:
-            flash("Please fill in new and confirm password", "failNew")
+            flash("Please fill in new and confirm password.", "failNew")
             return redirect("/changepass")
         
         if len(password) < 8:
-            flash("New password must be more than 8 characters", "failNew")
+            flash("New password must be more than 8 characters.", "failNew")
             return redirect("/changepass")
 
         if password != confirm:
             flash("New and confirm passwords do not match.", "failNew")
             return redirect("/changepass")
+        
+        if oldpass == password:
+            flash("New password cannot be the same as previous.", "failNew")
         
         insert_db("UPDATE users SET password_hash = ? WHERE id = ?",  [generate_password_hash(password), session["user_id"]])
         flash("Success! Your password has been updated.", "success")

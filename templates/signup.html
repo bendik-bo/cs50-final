@@ -2,8 +2,8 @@
 main %}
 <h2>Sign up</h2>
 <form action="/signup" method="POST">
-  <div class="field-container">
-    <div class="field-row">
+  <div class="column">
+    <div class="row">
       <label class="label" for="username">Username:</label>
       <input
         name="username"
@@ -22,7 +22,7 @@ main %}
       >
       {% endif %} {% endwith %}
     </div>
-    <div class="field-row">
+    <div class="row">
       <label class="label" for="password">Password:</label>
       <input 
       name="password"
@@ -32,7 +32,7 @@ main %}
       type="password" 
       />
     </div>
-    <div class="field-row">
+    <div class="row">
       <label class="label" for="confirm">Confirm password:</label>
       <input 
       name="confirm"
@@ -48,7 +48,7 @@ main %}
       }}
     </span>
     {% endif %} {% endwith %}
-    <div class="field-row">
+    <div class="row">
       <button class="btn" type="submit">Sign up!</button>
     </div>
   </div>
