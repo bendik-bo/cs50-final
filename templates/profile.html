@@ -7,6 +7,7 @@ main %}
   <input type="file" name="file" id="upload" />
   <button type="submit" id="upload-btn">Upload</button>
 </form>
+<p>Max file size: 5MB</p>
 
 {% with message = get_flashed_messages(category_filter=["failUpload"]) %} 
 {% if message %}
@@ -16,13 +17,13 @@ main %}
 {% endif %}
 {% endwith %}
 
-{% with message = get_flashed_messages(category_filter=["successUpload"]) %} 
+{% with message = get_flashed_messages(category_filter=["success"]) %} 
 {% if message %}
 <span class="successMsg"
   ><i class="	fas fa-laugh icon"></i>{{ message | join(" ") }}</span
 >
 {% endif %}
 {% endwith %}
-<p>Max file size: 5MB</p>
+<a href="/changepass"><h3>Change password</h3></a>
 
 {% endblock %}
