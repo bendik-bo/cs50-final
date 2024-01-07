@@ -1,0 +1,13 @@
+Profile: 
+- Change password. New page/route(?)
+
+"Create Quiz" HTML:
+- Title
+- Time limit
+- Amount of questions
+	For each:
+	Question type (True/false, multiple option, enter answer)
+
+"Create Quiz" Route & DB
+
+

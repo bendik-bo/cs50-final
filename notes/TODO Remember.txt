@@ -1,6 +1,0 @@
-Flask - Add secret key(?)
-
-
-if __name__ == "__main__":
-    app.run()
-At bottom?

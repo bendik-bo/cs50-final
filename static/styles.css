@@ -192,3 +192,11 @@ input:focus {
   width: 150px;
   object-fit: cover;
 }
+
+#upload {
+  min-height: 50px;
+}
+
+#upload-btn {
+  min-height: 50px;
+}

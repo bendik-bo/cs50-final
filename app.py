@@ -136,6 +136,43 @@ def profile():
     result = query_db("SELECT url FROM images where user_id = ?", [session["user_id"]], one=True)
     return render_template("profile.html", url=result["url"])
 
+@app.route("/changepass", methods=["GET", "POST"])
+@login_required
+def changepass():
+    if request.method == "POST":
+        oldpass = request.form.get("oldpass")
+        password = request.form.get("password")
+        confirm = request.form.get("confirm")
+
+        print(oldpass)
+        if not oldpass:
+            flash("Please fill in previous password", "failOld")
+            return redirect("/changepass")
+        
+        result = query_db("SELECT password_hash FROM users WHERE id = ?", [session["user_id"]], one=True)
+        if not check_password_hash(result["password_hash"], oldpass):
+            flash("Old password does not match", "failOld")
+            return redirect("/changepass")
+
+        if not password or not confirm:
+            flash("Please fill in new and confirm password", "failNew")
+            return redirect("/changepass")
+        
+        if len(password) < 8:
+            flash("New password must be more than 8 characters", "failNew")
+            return redirect("/changepass")
+
+        if password != confirm:
+            flash("New and confirm passwords do not match.", "failNew")
+            return redirect("/changepass")
+        
+        insert_db("UPDATE users SET password_hash = ? WHERE id = ?",  [generate_password_hash(password), session["user_id"]])
+        flash("Success! Your password has been updated.", "success")
+        return redirect("/profile")
+
+    else:
+        return render_template("changepass.html")
+
 @app.route("/upload", methods=["POST"])
 @login_required
 def upload():
@@ -164,7 +201,7 @@ def upload():
             file.save(url)
             insert_db("UPDATE images SET url = ? WHERE user_id = ?", [url, session["user_id"]])
 
-            flash("Upload successful", "successUpload")
+            flash("Upload successful", "success")
             return redirect("/profile")
 
         else:
