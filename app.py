@@ -202,7 +202,11 @@ def upload():
             filename = secure_filename(username[0] + "." + filetype)
             previous = query_db("SELECT url FROM images where user_id = ?", [session["user_id"]], one=True)
             if previous["url"] != DEFAULT_AVATAR:
-                os.remove(previous["url"])
+                if os.path.exists(previous["url"]):
+                    os.remove(previous["url"])
+                else:
+                    flash("No previous file found for deletion", "failUpload")
+                    return redirect("/profile")
 
             url = os.path.join(app.config["USER_IMAGES"], filename)
             file.save(url)
