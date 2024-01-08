@@ -221,6 +221,14 @@ def upload():
 
     else:
         return render_template("profile.html")
+    
+@app.route("/create", methods=["GET", "POST"])
+@login_required
+def create():
+    if request.method == "POST":
+        return redirect("/create")
+    else: 
+        return render_template("create.html")
 
 if __name__ == "__main__":
     app.run(debug=True)

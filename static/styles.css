@@ -124,6 +124,7 @@ main {
 
 .center {
   justify-content: center;
+  align-items: center;
 }
 
 /* Containers */
@@ -137,6 +138,7 @@ main {
 .field-row {
   display: flex;
   flex-direction: row;
+  width: 100%;
 }
 
 .field-container {
@@ -144,9 +146,19 @@ main {
   margin-bottom: 5px;
 }
 
-/* Label text */
+/* Labels */
 .label {
   color: white;
+  white-space: nowrap;
+}
+
+.create-label {
+  color: white;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  margin-right: 10px;
 }
 
 /* Inputs */
