@@ -3,19 +3,21 @@ main %}
 <h1>Log in</h1>
 <form action="/login" method="POST">
   <div class="container">
-    <div class="field-row">
-      <label class="label" for="username" value="{{ username }}">Username:</label>
-    </div>
-    <div class="field-row center">
-      <input
-        autocomplete="off"
-        autofocus
-        class="field"
-        id="username"
-        name="username"
-        type="text"
-        value="{{ username }}"
-      />
+    <div class="field-container">
+      <div class="field-row">
+        <label class="label" for="username" value="{{ username }}">Username:</label>
+      </div>
+      <div class="field-row center">
+        <input
+          autocomplete="off"
+          autofocus
+          class="field"
+          id="username"
+          name="username"
+          type="text"
+          value="{{ username }}"
+        />
+      </div>
     </div>
     {% with message = get_flashed_messages(category_filter=["failUsername"]) %} 
     {% if message %}
@@ -25,15 +27,17 @@ main %}
     </span>
     {% endif %}
     {% endwith %}
-    <div class="field-row">
-      <label class="label" for="password">Password:</label>
-    </div>
-    <div class="field-row center">
-      <input 
-        id="password" 
-        class="field" 
-        name="password" 
-        type="password" />
+    <div class="field-container">
+      <div class="field-row">
+        <label class="label" for="password">Password:</label>
+      </div>
+      <div class="field-row center">
+        <input 
+          id="password" 
+          class="field" 
+          name="password" 
+          type="password" />
+      </div>
     </div>
     {% with message = get_flashed_messages(category_filter=["failPassword"]) %} 
     {% if message %}

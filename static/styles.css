@@ -126,16 +126,22 @@ main {
   justify-content: center;
 }
 
-/* Input field for login/signup */
+/* Containers */
 .container {
   display: flex;
   flex-direction: column;
   gap: 5px;
+  align-items: center;
   }
 
 .field-row {
   display: flex;
   flex-direction: row;
+}
+
+.field-container {
+  max-width: 200px;
+  margin-bottom: 5px;
 }
 
 /* Label text */
@@ -150,6 +156,7 @@ input {
   border-radius: 5px;
   padding: 15px 5px;
   outline: none;
+  width: 100%;
 }
 input:focus {
   background-color: rgb(233, 233, 233);
@@ -206,9 +213,5 @@ input:focus {
 }
 
 #upload {
-  min-height: 50px;
-}
-
-#upload-btn {
   min-height: 50px;
 }

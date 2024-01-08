@@ -5,17 +5,20 @@ Change password
 {% block main %}
 <form action="/changepass" method="POST">
     <div class="container">
-        <div class="field-row">
-            <label class="label" for="oldpass">Old password:</label>
-        <div class="field-row">
-            <input
-                name="oldpass"
-                id="oldpass"
-                autocomplete="off"
-                autofocus
-                class="field"
-                type="password"
-            />
+        <div class="field-container">
+            <div class="field-row">
+                <label class="label" for="oldpass">Old password:</label>
+            </div>
+            <div class="field-row">
+                <input
+                    name="oldpass"
+                    id="oldpass"
+                    autocomplete="off"
+                    autofocus
+                    class="field"
+                    type="password"
+                />
+            </div>
         </div>
             {% with message = get_flashed_messages(category_filter=["failOld"]) %} 
             {% if message %}
@@ -24,26 +27,33 @@ Change password
             </span>
             {% endif %} 
             {% endwith %}
+        <div class="field-container">
+            <div class="field-row">
+                <label class="label" for="password">New Password:</label>
+            </div>
+            <div class="field-row">
+                <input 
+                name="password" 
+                id="password"
+                autocomplete="off" 
+                class="field" 
+                type="password" 
+                />
+            </div>
         </div>
-        <div class="field-row">
-            <label class="label" for="password">New Password:</label>
-            <input 
-            name="password" 
-            id="password"
-            autocomplete="off" 
-            class="field" 
-            type="password" 
-            />
-        </div>
-        <div class="field-row">
-            <label class="label" for="confirm">Confirm password:</label>
-            <input 
-            name="confirm" 
-            id="confirm"
-            autocomplete="off" 
-            class="field" 
-            type="password" 
-            />
+        <div class="field-container">
+            <div class="field-row">
+                <label class="label" for="confirm">Confirm password:</label>
+            </div>
+            <div class="field-row">
+                <input 
+                name="confirm" 
+                id="confirm"
+                autocomplete="off" 
+                class="field" 
+                type="password" 
+                />
+            </div>
         </div>
         {% with message = get_flashed_messages(category_filter=["failNew"]) %} 
         {% if message %}
@@ -52,7 +62,7 @@ Change password
         </span>
         {% endif %} 
         {% endwith %}
-        <div class="field-row">
+        <div class="field-row center">
             <button class="field-btn" type="submit">Change</button>
         </div>
     </div>
