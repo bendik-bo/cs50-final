@@ -200,6 +200,10 @@ def upload():
             username = query_db("SELECT username FROM users WHERE id = ?", [session["user_id"]], one=True)
             filetype = file.filename.rsplit(".", 1)[1]
             filename = secure_filename(username[0] + "." + filetype)
+            previous = query_db("SELECT url FROM images where user_id = ?", [session["user_id"]], one=True)
+            if previous["url"] != DEFAULT_AVATAR:
+                os.remove(previous["url"])
+
             url = os.path.join(app.config["USER_IMAGES"], filename)
             file.save(url)
             insert_db("UPDATE images SET url = ? WHERE user_id = ?", [url, session["user_id"]])
