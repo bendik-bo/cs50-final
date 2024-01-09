@@ -228,13 +228,27 @@ def create():
     if request.method == "POST":
         title = request.form.get("title")
         quiztype = request.form.get("quiztype")
-        amount = int(request.form.get("amount"))
+        amount = request.form.get("amount")
         time = request.form.get("time")
-        print(type(title), title)
-        print(type(quiztype), quiztype)
-        print(type(amount), amount)
-        print(type(time), time)
 
+        if not title:
+            flash("Title field cannot be empty.", "failCreate")
+            return redirect("/create")
+        
+        if len(title) > 50:
+            flash("Title cannot be longer than 50 characters.", "failCreate")
+            return redirect("/create")
+
+        if not quiztype:
+            flash("You must choose a quiz type.", "failCreate")
+            return render_template("create.html", title=title)
+        
+        if not amount:
+            flash("You must specify amount of questions.", "failCreate")
+            return render_template("create.html", title=title)
+
+        amount = int(amount)
+        print(type(amount), amount)
 
         return render_template("create.html", amount=amount, quiztype=quiztype)
     else: 

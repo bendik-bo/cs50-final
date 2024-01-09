@@ -15,6 +15,9 @@ Create Quiz
                 autofocus
                 class="field"
                 type="text"
+                value="{{ title }}"
+                placeholder="Max 50 characters"
+                maxlength="50"
             />
         </div>
         <div class="field-row">
@@ -42,12 +45,13 @@ Create Quiz
             <label for="enter">Enter Answer</label> 
         </div>
         <div class="field-row">
-            <label class="create-label" for="amount">Amount of questions:</label>
+            <label class="create-label" for="amount">Number of questions:</label>
             <input
                 name="amount"
                 id="amount"
                 class="field"
                 type="number"
+                value="{{ amount }}"
             />
             <label class="create-label" for="time">Time Limit:</label>
             <input
@@ -55,8 +59,17 @@ Create Quiz
                 id="time"
                 class="field"
                 type="number"
+                value="{{ time }}"
             />
         </div>
+        {% with message = get_flashed_messages(category_filter=["failCreate"]) %} 
+        {% if message %}
+        <span class="failureMsg"
+          ><i class="fas fa-exclamation-triangle icon"></i>{{ message | join(" ")
+          }}
+        </span>
+        {% endif %}
+        {% endwith %}
         <div class="field-row center">
             <button class="field-btn" type="submit">Generate</button>
         </div>
@@ -72,18 +85,32 @@ Create Quiz
                         class="field"
                         type="text"
                         />
-                        <h2>Answer:</h2>
                         {% if quiztype == "bool" %}
-                            <input type="radio" name="true">
-                            <label for="true">True</label>
-                            <input type="radio" name="false">
+                            <label class="create-label" for="bool{{ i+1 }}">Answer:</label>
+                            <input 
+                                type="radio" 
+                                name="bool{{ i+1 }}"
+                                id="true"
+                                value="true"
+                                >
+                            <label for="false">True</label>
+                            <input 
+                                type="radio" 
+                                name="bool{{ i+1 }}"
+                                id="false"
+                                value="false"
+                                >
                             <label for="false">False</label>
                         {% endif %}
                     </li>
                 {% endfor %}
+                <div class="field-row center">
+                    <button class="field-btn" type="submit">Submit</button>
+                </div>
             {% endif %}
             </ul>
         </div>
+
     </div>
 </form>
 {% endblock %}
