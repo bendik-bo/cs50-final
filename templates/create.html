@@ -78,10 +78,10 @@ Create Quiz
             {% if amount %}
                 {% for i in range(amount) %}
                     <li class="q-list center">
-                        <label class="create-label" for="Question {{ i+1 }}">Question {{ i+1 }}:</label> 
+                        <label class="create-label" for="Question{{ i+1 }}">Question {{ i+1 }}:</label> 
                         <input
-                        name="question {{ i+1 }}"
-                        id="question {{ i+1 }}"
+                        name="question{{ i+1 }}"
+                        id="question{{ i+1 }}"
                         class="field"
                         type="text"
                         />
