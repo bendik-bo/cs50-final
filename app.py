@@ -226,7 +226,17 @@ def upload():
 @login_required
 def create():
     if request.method == "POST":
-        return redirect("/create")
+        title = request.form.get("title")
+        quiztype = request.form.get("quiztype")
+        amount = int(request.form.get("amount"))
+        time = request.form.get("time")
+        print(type(title), title)
+        print(type(quiztype), quiztype)
+        print(type(amount), amount)
+        print(type(time), time)
+
+
+        return render_template("create.html", amount=amount, quiztype=quiztype)
     else: 
         return render_template("create.html")
 

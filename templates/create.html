@@ -4,7 +4,7 @@ Create Quiz
 {% endblock %} 
 {% block main %}
 <h1>Create your own quiz!</h1>
-<form action="/changepass" method="POST">
+<form action="/create" method="POST">
     <div class="container">
         <div class="field-row">
             <label class="create-label" for="title">Title:</label>
@@ -18,23 +18,23 @@ Create Quiz
             />
         </div>
         <div class="field-row">
-            <label class="create-label" for="type">Type:</label>
+            <label class="create-label" for="quiztype">Type:</label>
             <input
-                name="type"
+                name="quiztype"
                 id="bool"
                 type="radio"
                 value="bool"
             />
             <label for="bool">True/False</label>
             <input
-                name="type"
+                name="quiztype"
                 id="multiple"
                 type="radio"
                 value="multiple"
             />
             <label for="multiple">Multiple Options</label>
             <input
-                name="type"
+                name="quiztype"
                 id="enter"
                 type="radio"
                 value="enter"
@@ -56,6 +56,33 @@ Create Quiz
                 class="field"
                 type="number"
             />
+        </div>
+        <div class="field-row center">
+            <button class="field-btn" type="submit">Generate</button>
+        </div>
+        <div class="field-row center">
+            <ul>
+            {% if amount %}
+                {% for i in range(amount) %}
+                    <li class="q-list center">
+                        <label class="create-label" for="Question {{ i+1 }}">Question {{ i+1 }}:</label> 
+                        <input
+                        name="question {{ i+1 }}"
+                        id="question {{ i+1 }}"
+                        class="field"
+                        type="text"
+                        />
+                        <h2>Answer:</h2>
+                        {% if quiztype == "bool" %}
+                            <input type="radio" name="true">
+                            <label for="true">True</label>
+                            <input type="radio" name="false">
+                            <label for="false">False</label>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            {% endif %}
+            </ul>
         </div>
     </div>
 </form>

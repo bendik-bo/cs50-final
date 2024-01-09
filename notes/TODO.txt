@@ -1,14 +1,10 @@
-Profile: 
-- Delete previous avatar when uploading new
-
 "Create Quiz" HTML:
 - Title
 - Time limit
 - Amount of questions
 	For each:
 	Question type (True/false, multiple option, enter answer)
+- Choose category
+
 
 "Create Quiz" Route & DB
-
-
-Worked on making container and field-row more dynamic. Added .center

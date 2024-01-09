@@ -34,6 +34,10 @@ h1 {
   margin-bottom: 15px;
 }
 
+h2 {
+  color: white;
+}
+
 /* Navbar */
 nav {
   display: flex;
@@ -226,4 +230,11 @@ input:focus {
 
 #upload {
   min-height: 50px;
+}
+
+/* Lists */
+.q-list {
+  list-style-type: none;
+  display: flex;
+  white-space: nowrap;
 }
