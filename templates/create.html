@@ -73,44 +73,64 @@ Create Quiz
         <div class="field-row center">
             <button class="field-btn" type="submit">Generate</button>
         </div>
-        <div class="field-row center">
+        {% if amount %}
             <ul>
-            {% if amount %}
                 {% for i in range(amount) %}
-                    <li class="q-list center">
-                        <label class="create-label" for="Question {{ i+1 }}">Question {{ i+1 }}:</label> 
-                        <input
-                        name="question {{ i+1 }}"
-                        id="question {{ i+1 }}"
-                        class="field"
-                        type="text"
-                        />
-                        {% if quiztype == "bool" %}
-                            <label class="create-label" for="bool{{ i+1 }}">Answer:</label>
-                            <input 
-                                type="radio" 
-                                name="bool{{ i+1 }}"
-                                id="true"
-                                value="true"
-                                >
-                            <label for="false">True</label>
-                            <input 
-                                type="radio" 
-                                name="bool{{ i+1 }}"
-                                id="false"
-                                value="false"
-                                >
-                            <label for="false">False</label>
-                        {% endif %}
-                    </li>
+                    <div class="field-row center">
+                        <li class="q-list center">
+                            <label class="create-label" for="question{{ i+1 }}">Question {{ i+1 }}:</label> 
+                            <input
+                            name="question{{ i+1 }}"
+                            id="question{{ i+1 }}"
+                            class="field"
+                            type="text"
+                            />
+                            {% if quiztype == "bool" %}
+                                <label class="create-label" for="bool{{ i+1 }}">Answer:</label>
+                                <input 
+                                    type="radio" 
+                                    name="bool{{ i+1 }}"
+                                    id="true"
+                                    value="true"
+                                    >
+                                <label for="false">True</label>
+                                <input 
+                                    type="radio" 
+                                    name="bool{{ i+1 }}"
+                                    id="false"
+                                    value="false"
+                                    >
+                                <label for="false">False</label>
+                            {% endif %}
+                            {% if quiztype == "multiple" %}
+                                {% for j in range(3) %}
+                                    <label class="create-label" for="answer{{ j+1 }}">Answer {{ i+1 }}:</label> 
+                                    <input
+                                        name="answer{{ j+1 }}"
+                                        id="answer{{ j+1 }}"
+                                        class="field"
+                                        type="text"
+                                    />
+                                {% endfor %}
+                            {% endif %}
+                            {% if quiztype == "enter" %}
+                                <label class="create-label" for="answer{{ i+1 }}">Answer:</label> 
+                                <input
+                                    name="answer{{ i+1 }}"
+                                    id="answer{{ i+1 }}"
+                                    class="field"
+                                    type="text"
+                                />
+                            {% endif %}
+                        </li>
+                    </div>
+                <hr>
                 {% endfor %}
+            </ul>
                 <div class="field-row center">
                     <button class="field-btn" type="submit">Submit</button>
                 </div>
-            {% endif %}
-            </ul>
-        </div>
-
+        {% endif %}
     </div>
 </form>
 {% endblock %}

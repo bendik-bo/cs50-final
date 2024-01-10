@@ -247,8 +247,10 @@ def create():
             flash("You must specify amount of questions.", "failCreate")
             return render_template("create.html", title=title)
 
-        amount = int(amount)
-        print(type(amount), amount)
+        try: 
+            amount = int(amount)
+        except ValueError:
+            print("Error converting question amount into integer.")
 
         return render_template("create.html", amount=amount, quiztype=quiztype)
     else: 
