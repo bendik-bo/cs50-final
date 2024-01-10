@@ -27,7 +27,7 @@ Create Quiz
                 id="bool"
                 type="radio"
                 value="bool"
-                {{ boolCheck }}
+                {% if checked == "bool" %}checked{% endif %}
             />
             <label for="bool">True/False</label>
             <input
@@ -35,7 +35,7 @@ Create Quiz
                 id="multiple"
                 type="radio"
                 value="multi"
-                {{ multiCheck }}
+                {% if checked == "multi" %}checked{% endif %}
             />
             <label for="multi">Multiple Options</label>
             <input
@@ -43,7 +43,7 @@ Create Quiz
                 id="enter"
                 type="radio"
                 value="enter"
-                {{ enterCheck }}
+                {% if checked== "enter" %}checked{% endif %}
             />
             <label for="enter">Enter Answer</label> 
         </div>
@@ -84,23 +84,20 @@ Create Quiz
                             <label class="create-label" for="question{{ i+1 }}">Question {{ i+1 }}:</label> 
                             <input
                             name="question{{ i+1 }}"
-                            id="question{{ i+1 }}"
                             class="field"
                             type="text"
                             />
                             {% if quiztype == "bool" %}
                                 <label class="create-label" for="bool{{ i+1 }}">Answer:</label>
                                 <input 
-                                    type="radio" 
                                     name="bool{{ i+1 }}"
-                                    id="true"
+                                    type="radio" 
                                     value="true"
                                     >
                                 <label for="false">True</label>
                                 <input 
-                                    type="radio" 
                                     name="bool{{ i+1 }}"
-                                    id="false"
+                                    type="radio" 
                                     value="false"
                                     >
                                 <label for="false">False</label>
@@ -109,19 +106,17 @@ Create Quiz
                             <label class="create-label" for="answer{{ i+1 }}">Answer:</label> 
                             <input
                             name="answer{{ i+1 }}"
-                            id="answer{{ i+1 }}"
                             class="field"
                             type="text"
                             />
                             {% endif %}
                     </div>
-                    {% if quiztype == "multiple" %}
+                    {% if quiztype == "multi" %}
                     <div class="field-row">
                         {% for j in range(3) %}
                             <label class="create-label" for="answer{{ j+1 }}">Answer {{ i+1 }}:</label> 
                             <input
-                                name="answer{{ j+1 }}"
-                                id="answer{{ j+1 }}"
+                                name="answer{{ i+1 }}_{{ j+1 }}"
                                 class="field"
                                 type="text"
                             />

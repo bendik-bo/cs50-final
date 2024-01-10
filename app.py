@@ -242,33 +242,30 @@ def create():
         if not quiztype:
             flash("You must choose a quiz type.", "failCreate")
             return render_template("create.html", title=title)
-        
-        boolCheck = ""
-        multiCheck = ""
-        enterCheck = ""
-        
+
         if quiztype == "bool":
-            boolCheck = "checked"
+            checked = "bool"
         elif quiztype == "multi":
-            multiCheck = "checked"
+            checked = "multi"
         elif quiztype == "enter":
-            enterCheck = "checked"
+            checked = "enter"
         
         if not amount:
             flash("You must specify amount of questions.", "failCreate")
-            return render_template("create.html", title=title)
+            return render_template("create.html", title=title, checked=checked)
 
         try: 
             amount = int(amount)
         except ValueError:
             print("Error converting question amount into integer.")
 
-        # for i in range(amount):
-        #     print(i)
-        #     j = "question" + str(i)
-        #     print(request.form.get(j))
+        for i in range(amount):
+            answer = request.form.get(f"bool{i+1}")
+            datatype = type(answer)
+            print(i, answer, datatype)
+            
 
-        return render_template("create.html", amount=amount, quiztype=quiztype, title=title, boolCheck=boolCheck, multiCheck=multiCheck, enterCheck=enterCheck)
+        return render_template("create.html", amount=amount, quiztype=quiztype, title=title, checked=checked)
     else: 
         return render_template("create.html")
 

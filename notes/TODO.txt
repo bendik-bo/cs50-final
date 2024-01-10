@@ -8,3 +8,39 @@
 
 
 "Create Quiz" Route & DB
+
+
+Modified multi answer so I can retrieve all 3 from each question. Removed unused id's.
+
+
+
+from flask import request
+
+@app.route("/create", methods=["GET", "POST"])
+@login_required
+def create():
+    if request.method == "POST":
+        # ... existing code ...
+
+        if quiztype == "multi":
+            answers = []
+            for i in range(amount):
+                question_text = request.form.get(f"question{i+1}")
+                for j in range(3):  # Assuming there are 3 answer options per question
+                    answer_text = request.form.get(f"answer{i+1}_{j+1}")
+                    answers.append({"question": question_text, "answer": answer_text})
+
+            # Now 'answers' is a list of dictionaries, each containing the question and its associated answers
+            # You can use this data as needed (e.g., store it in the database)
+
+        # ... remaining code ...
+
+
+<!-- Inside the loop for questions -->
+<label class="create-label" for="answer{{ j+1 }}">Answer {{ j+1 }}:</label> 
+<input
+    name="answer{{ i+1 }}_{{ j+1 }}"
+    id="answer{{ j+1 }}"
+    class="field"
+    type="text"
+/>
