@@ -27,20 +27,23 @@ Create Quiz
                 id="bool"
                 type="radio"
                 value="bool"
+                {{ boolCheck }}
             />
             <label for="bool">True/False</label>
             <input
                 name="quiztype"
                 id="multiple"
                 type="radio"
-                value="multiple"
+                value="multi"
+                {{ multiCheck }}
             />
-            <label for="multiple">Multiple Options</label>
+            <label for="multi">Multiple Options</label>
             <input
                 name="quiztype"
                 id="enter"
                 type="radio"
                 value="enter"
+                {{ enterCheck }}
             />
             <label for="enter">Enter Answer</label> 
         </div>
@@ -102,28 +105,30 @@ Create Quiz
                                     >
                                 <label for="false">False</label>
                             {% endif %}
-                            {% if quiztype == "multiple" %}
-                                {% for j in range(3) %}
-                                    <label class="create-label" for="answer{{ j+1 }}">Answer {{ i+1 }}:</label> 
-                                    <input
-                                        name="answer{{ j+1 }}"
-                                        id="answer{{ j+1 }}"
-                                        class="field"
-                                        type="text"
-                                    />
-                                {% endfor %}
-                            {% endif %}
                             {% if quiztype == "enter" %}
-                                <label class="create-label" for="answer{{ i+1 }}">Answer:</label> 
-                                <input
-                                    name="answer{{ i+1 }}"
-                                    id="answer{{ i+1 }}"
-                                    class="field"
-                                    type="text"
-                                />
+                            <label class="create-label" for="answer{{ i+1 }}">Answer:</label> 
+                            <input
+                            name="answer{{ i+1 }}"
+                            id="answer{{ i+1 }}"
+                            class="field"
+                            type="text"
+                            />
                             {% endif %}
-                        </li>
                     </div>
+                    {% if quiztype == "multiple" %}
+                    <div class="field-row">
+                        {% for j in range(3) %}
+                            <label class="create-label" for="answer{{ j+1 }}">Answer {{ i+1 }}:</label> 
+                            <input
+                                name="answer{{ j+1 }}"
+                                id="answer{{ j+1 }}"
+                                class="field"
+                                type="text"
+                            />
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                        </li>
                 <hr>
                 {% endfor %}
             </ul>
