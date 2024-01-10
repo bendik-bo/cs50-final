@@ -9,3 +9,33 @@ CREATE TABLE avatars (
 	avatar BLOB,
 	FOREIGN KEY(user_id) REFERENCES users(id)
 );
+
+CREATE TABLE quizzes {
+	id INTEGER PRIMARY KEY,
+	title TEXT NOT NULL,
+	creator_id INTEGER
+	FOREIGN KEY (creator_id) REFERENCES users(id)
+};
+
+CREATE TABLE questions {
+	id INTEGER PRIMARY KEY,
+	quiz_id INTEGER NOT NULL,
+	question TEXT NOT NULL,
+	FOREIGN KEY (quiz_id) REFERENCES quizzes(id)
+	
+};
+
+CREATE TABLE bool-answers {
+	question_id INTEGER NOT NULL,
+	
+};
+
+CREATE TABLE multi-answers {
+	question_id INTEGER NOT NULL,
+	
+};
+
+CREATE TABLE enter-answers {
+	question_id INTEGER NOT NULL,
+	
+};
