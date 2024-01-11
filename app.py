@@ -255,18 +255,24 @@ def create():
         if not amount:
             flash("You must specify amount of questions.", "failCreate")
             return render_template("create.html", title=title, checked=checked, categories=categories)
-
+        
         try: 
             amount = int(amount)
         except ValueError:
             print("Error converting question amount into integer.")
 
+        if amount > 30:
+            flash("Number of questions cannot exceed 30", "failCreate")
+            return render_template("create.html", title=title, checked=checked, categories=categories)
+
         session["quiz_data"] = {
             "title": title,
-            "category": category
+            "category": category,
+            "type": quiztype,
+            "amount": amount
         }
 
-        return render_template("create.html", amount=amount, quiztype=quiztype, title=title, checked=checked, categories=categories, time=time)
+        return render_template("create.html", amount=amount, quiztype=quiztype, title=title, checked=checked, categories=categories)
     else: 
         return render_template("create.html", categories=categories)
 
@@ -282,9 +288,9 @@ def submit():
     # time = request.form.get("time")
 
     # insert_db("INSERT INTO users (username, password_hash) VALUES (?, ?)", [username, generate_password_hash(password)])
+    quiz_data = session.pop("quiz_data", None)
 
-
-    print(session["quiz_data"]["title"])
+    print(quiz_data)
 
     # insert_db("INSERT INTO quizzes (title, category, creator_id) VALUES (?, ?, ?)", [request.form.get("title"), request.form.get("category"), session["user_id"]])
     

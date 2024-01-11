@@ -1,7 +1,8 @@
-- Create DB Tables for Quizzes, Questions and Anwers.
 
-
-- Create category
+- Retrieve Q&A in Create route
+- Check all Q&A filled in
+- Store Q&A in session
+- Store Q&A in DB
 
 
 

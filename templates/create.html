@@ -4,8 +4,8 @@ Create Quiz
 {% endblock %} 
 {% block main %}
 <h1>Create your own quiz!</h1>
-<form action="/create" method="POST">
-    <div class="container">
+<div class="container">
+    <form action="/create" method="POST">
         <div class="field-row">
             <label class="create-label" for="title">Title:</label>
             <input
@@ -63,6 +63,7 @@ Create Quiz
                 class="field"
                 type="number"
                 value="{{ amount }}"
+                placeholder="Max 30"
             />
             <label class="create-label" for="time">Time Limit:</label>
             <input
@@ -84,6 +85,8 @@ Create Quiz
         <div class="field-row center">
             <button class="field-btn" type="submit">Generate</button>
         </div>
+    </form>
+    <form action="/submit" method="POST">
         {% if amount %}
             <ul>
                 {% for i in range(amount) %}
@@ -135,14 +138,10 @@ Create Quiz
                     <hr>
                 {% endfor %}
             </ul>
+            <div class="field-row center">
+                <button class="field-btn" type="submit">Submit</button>
+            </div>
         {% endif %}
-    </div>
-</form>
-{% if amount %}
-<form action="/submit" method="POST">
-    <div class="field-row center">
-        <button class="field-btn" type="submit">Submit</button>
-    </div>
-</form>
-{% endif %}
+    </form>
+</div>
 {% endblock %}
