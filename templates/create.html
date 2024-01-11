@@ -75,12 +75,13 @@ Create Quiz
             />
         </div>
         {% with message = get_flashed_messages(category_filter=["failCreate"]) %} 
-        {% if message %}
-        <span class="failureMsg"
-          ><i class="fas fa-exclamation-triangle icon"></i>{{ message | join(" ")
-          }}
-        </span>
-        {% endif %}
+            {% if message %}
+                <div class="field-row center">
+                    <span class="failureMsg">
+                        <i class="fas fa-exclamation-triangle icon"></i>{{ message | join(" ") }}
+                    </span>
+                </div>
+            {% endif %}
         {% endwith %}
         <div class="field-row center">
             <button class="field-btn" type="submit">Generate</button>
@@ -138,6 +139,15 @@ Create Quiz
                     <hr>
                 {% endfor %}
             </ul>
+            {% with message = get_flashed_messages(category_filter=["failSubmit"]) %} 
+                {% if message %}
+                    <div class="field-row center">
+                        <span class="failureMsg">
+                            <i class="fas fa-exclamation-triangle icon"></i>{{ message | join(" ") }}
+                        </span>
+                    </div>
+                {% endif %}
+            {% endwith %}
             <div class="field-row center">
                 <button class="field-btn" type="submit">Submit</button>
             </div>

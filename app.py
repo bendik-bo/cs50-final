@@ -281,16 +281,19 @@ def create():
 @login_required
 def submit():
     """Stores the quiz in DB and redirects to said quiz page"""
-    # title = request.form.get("title")
-    # quiztype = request.form.get("quiztype")
-    # category = request.form.get("category")
-    # amount = request.form.get("amount")
-    # time = request.form.get("time")
 
-    # insert_db("INSERT INTO users (username, password_hash) VALUES (?, ?)", [username, generate_password_hash(password)])
     quiz_data = session.pop("quiz_data", None)
-
     print(quiz_data)
+
+    for i in range(quiz_data["amount"]):
+        question = request.form.get(f"question{i+1}")
+        print((i+1),":", question)
+
+        if not question:
+            flash("Must fill in all the questions.", "failSubmit")
+            return render_template("create.html", amount=quiz_data["amount"], quiztype=quiz_data["type"], title=quiz_data["title"], checked=quiz_data["type"], categories=categories)
+
+
 
     # insert_db("INSERT INTO quizzes (title, category, creator_id) VALUES (?, ?, ?)", [request.form.get("title"), request.form.get("category"), session["user_id"]])
     

@@ -1,9 +1,15 @@
 
-- Retrieve Q&A in Create route
+- Retrieve Q&A in Submit route
+
 - Check all Q&A filled in
+	Send the ones filled in back, so it doesn't get removed on submit click
+
 - Store Q&A in session
+
 - Store Q&A in DB
 
+
+Added error message for Qs&As in create.html, started work on filled Qs&As persistent.
 
 
 from flask import request
