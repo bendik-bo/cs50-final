@@ -47,7 +47,7 @@ Create Quiz
             />
             <label for="enter">Enter Answer</label> 
             <label class="create-label" for="category">Category:</label>
-            <select id="category" value="Nature">
+            <select id="category" name="category" onchange="saveSelected()">
                 {% for category in categories %}
                     <option value="{{ category }}">
                         {{ category }}

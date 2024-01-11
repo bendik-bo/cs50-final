@@ -229,8 +229,10 @@ def create():
     if request.method == "POST":
         title = request.form.get("title")
         quiztype = request.form.get("quiztype")
+        category = request.form.get("category")
         amount = request.form.get("amount")
         time = request.form.get("time")
+
 
         if not title:
             flash("Title field cannot be empty.", "failCreate")
@@ -260,15 +262,16 @@ def create():
         except ValueError:
             print("Error converting question amount into integer.")
 
-        # for i in range(amount):
-        #     answer = request.form.get(f"bool{i+1}")
-        #     datatype = type(answer)
-        #     print(i, answer, datatype)
-            
-
         return render_template("create.html", amount=amount, quiztype=quiztype, title=title, checked=checked, categories=categories)
     else: 
         return render_template("create.html", categories=categories)
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+@app.route("/submit", methods=["POST"])
+@login_required
+def submit():
+    """Stores the quiz in DB and redirects to said quiz page"""
+
+    
