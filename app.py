@@ -233,7 +233,6 @@ def create():
         amount = request.form.get("amount")
         time = request.form.get("time")
 
-
         if not title:
             flash("Title field cannot be empty.", "failCreate")
             return redirect("/create")
@@ -262,16 +261,34 @@ def create():
         except ValueError:
             print("Error converting question amount into integer.")
 
-        return render_template("create.html", amount=amount, quiztype=quiztype, title=title, checked=checked, categories=categories)
+        session["quiz_data"] = {
+            "title": title,
+            "category": category
+        }
+
+        return render_template("create.html", amount=amount, quiztype=quiztype, title=title, checked=checked, categories=categories, time=time)
     else: 
         return render_template("create.html", categories=categories)
 
-if __name__ == "__main__":
-    app.run(debug=True)
 
 @app.route("/submit", methods=["POST"])
 @login_required
 def submit():
     """Stores the quiz in DB and redirects to said quiz page"""
+    # title = request.form.get("title")
+    # quiztype = request.form.get("quiztype")
+    # category = request.form.get("category")
+    # amount = request.form.get("amount")
+    # time = request.form.get("time")
 
+    # insert_db("INSERT INTO users (username, password_hash) VALUES (?, ?)", [username, generate_password_hash(password)])
+
+
+    print(session["quiz_data"]["title"])
+
+    # insert_db("INSERT INTO quizzes (title, category, creator_id) VALUES (?, ?, ?)", [request.form.get("title"), request.form.get("category"), session["user_id"]])
     
+    return render_template("create.html")
+
+if __name__ == "__main__":
+    app.run(debug=True)

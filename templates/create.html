@@ -132,13 +132,17 @@ Create Quiz
                     </div>
                     {% endif %}
                         </li>
-                <hr>
+                    <hr>
                 {% endfor %}
             </ul>
-                <div class="field-row center">
-                    <button class="field-btn" type="submit">Submit</button>
-                </div>
         {% endif %}
     </div>
 </form>
+{% if amount %}
+<form action="/submit" method="POST">
+    <div class="field-row center">
+        <button class="field-btn" type="submit">Submit</button>
+    </div>
+</form>
+{% endif %}
 {% endblock %}
