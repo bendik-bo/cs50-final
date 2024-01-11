@@ -4,38 +4,30 @@ CREATE TABLE users (
 	password_hash TEXT NOT NULL
 );
 
-CREATE TABLE avatars (
+CREATE TABLE images (
 	user_id INTEGER NOT NULL,
-	avatar BLOB,
+	url TEXT,
 	FOREIGN KEY(user_id) REFERENCES users(id)
 );
 
-CREATE TABLE quizzes {
+CREATE TABLE quizzes (
 	id INTEGER PRIMARY KEY,
 	title TEXT NOT NULL,
-	creator_id INTEGER
+	category TEXT,
+	creator_id INTEGER,
 	FOREIGN KEY (creator_id) REFERENCES users(id)
-};
+);
 
-CREATE TABLE questions {
+CREATE TABLE questions (
 	id INTEGER PRIMARY KEY,
 	quiz_id INTEGER NOT NULL,
 	question TEXT NOT NULL,
-	FOREIGN KEY (quiz_id) REFERENCES quizzes(id)
-	
-};
+	FOREIGN KEY (quiz_id) REFERENCES quizzes(id)	
+);
 
-CREATE TABLE bool-answers {
-	question_id INTEGER NOT NULL,
-	
-};
-
-CREATE TABLE multi-answers {
-	question_id INTEGER NOT NULL,
-	
-};
-
-CREATE TABLE enter-answers {
-	question_id INTEGER NOT NULL,
-	
-};
+CREATE TABLE answers (
+	question_id INTEGER,
+	answer TEXT,
+	bool INTEGER,
+	FOREIGN KEY (question_id) REFERENCES questions(id)
+);

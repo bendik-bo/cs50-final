@@ -10,6 +10,7 @@ from helpers import login_required, DATABASE, query_db, insert_db, allowed_file
 
 USER_IMAGES = "./static/images/users/"
 DEFAULT_AVATAR = "./static/images/Default-profile.jpg"
+categories = ["General Knowledge", "Science", "Technology", "Nature", "History", "Geography", "Pop Culture", "Music", "Movies & TV", "Sports", "Literature", "Food", "Other"]
 
 app = Flask(__name__)
 
@@ -241,7 +242,7 @@ def create():
 
         if not quiztype:
             flash("You must choose a quiz type.", "failCreate")
-            return render_template("create.html", title=title)
+            return render_template("create.html", title=title, categories=categories)
 
         if quiztype == "bool":
             checked = "bool"
@@ -252,22 +253,22 @@ def create():
         
         if not amount:
             flash("You must specify amount of questions.", "failCreate")
-            return render_template("create.html", title=title, checked=checked)
+            return render_template("create.html", title=title, checked=checked, categories=categories)
 
         try: 
             amount = int(amount)
         except ValueError:
             print("Error converting question amount into integer.")
 
-        for i in range(amount):
-            answer = request.form.get(f"bool{i+1}")
-            datatype = type(answer)
-            print(i, answer, datatype)
+        # for i in range(amount):
+        #     answer = request.form.get(f"bool{i+1}")
+        #     datatype = type(answer)
+        #     print(i, answer, datatype)
             
 
-        return render_template("create.html", amount=amount, quiztype=quiztype, title=title, checked=checked)
+        return render_template("create.html", amount=amount, quiztype=quiztype, title=title, checked=checked, categories=categories)
     else: 
-        return render_template("create.html")
+        return render_template("create.html", categories=categories)
 
 if __name__ == "__main__":
     app.run(debug=True)

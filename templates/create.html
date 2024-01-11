@@ -46,6 +46,14 @@ Create Quiz
                 {% if checked== "enter" %}checked{% endif %}
             />
             <label for="enter">Enter Answer</label> 
+            <label class="create-label" for="category">Category:</label>
+            <select id="category" value="Nature">
+                {% for category in categories %}
+                    <option value="{{ category }}">
+                        {{ category }}
+                    </option>
+                {% endfor %}
+            </select>
         </div>
         <div class="field-row">
             <label class="create-label" for="amount">Number of questions:</label>
