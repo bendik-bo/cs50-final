@@ -24,7 +24,7 @@ body {
   flex-direction: column;
   align-items: center;
   height: 100vh;
-  background: linear-gradient(to top, var(--honolulublue), var(--nonphotoblue));
+  background: linear-gradient(to top, gray, black);
 }
 
 /* Text */

@@ -12,7 +12,6 @@ Create Quiz
                 name="title"
                 id="title"
                 autocomplete="off"
-                autofocus
                 class="field"
                 type="text"
                 value="{{ title }}"
@@ -43,7 +42,7 @@ Create Quiz
                 id="enter"
                 type="radio"
                 value="enter"
-                {% if checked== "enter" %}checked{% endif %}
+                {% if checked == "enter" %}checked{% endif %}
             />
             <label for="enter">Enter Answer</label> 
             <label class="create-label" for="category">Category:</label>
@@ -98,6 +97,9 @@ Create Quiz
                             name="question{{ i+1 }}"
                             class="field"
                             type="text"
+                            {% if questions %}
+                            value="{{ questions[i] }}"
+                            {% endif %}
                             />
                             {% if quiztype == "bool" %}
                                 <label class="create-label" for="bool{{ i+1 }}">Answer:</label>
@@ -105,12 +107,22 @@ Create Quiz
                                     name="bool{{ i+1 }}"
                                     type="radio" 
                                     value="true"
+                                    {% if answers %}
+                                        {% if answers[i] == "true" %}
+                                            checked
+                                        {% endif %}
+                                    {% endif %}
                                     >
                                 <label for="false">True</label>
                                 <input 
                                     name="bool{{ i+1 }}"
                                     type="radio" 
                                     value="false"
+                                    {% if answers %}
+                                        {% if answers[i] == "false" %}
+                                            checked
+                                        {% endif %}
+                                    {% endif %}
                                     >
                                 <label for="false">False</label>
                             {% endif %}
@@ -124,16 +136,29 @@ Create Quiz
                             {% endif %}
                     </div>
                     {% if quiztype == "multi" %}
-                    <div class="field-row">
-                        {% for j in range(3) %}
-                            <label class="create-label" for="answer{{ j+1 }}">Answer {{ i+1 }}:</label> 
-                            <input
-                                name="answer{{ i+1 }}_{{ j+1 }}"
-                                class="field"
-                                type="text"
-                            />
-                        {% endfor %}
-                    </div>
+                        <div class="field-row">
+                            {% for j in range(3) %}
+                                <label class="create-label" for="answer{{ i+1 }}{{ j+1 }}">Answer {{ j+1 }}:</label> 
+                                <input
+                                    name="answer{{ i+1 }}_{{ j+1 }}"
+                                    class="field"
+                                    type="text"
+                                    {% if answers %}value="{{ answers[i][j] }}"{% endif %}
+                                />
+                            {% endfor %}
+                        </div>
+                        <div class="field-row">
+                            <h2>Correct answer:</h2>
+                            {% for n in range(3) %}
+                                <label class="create-label" for="correct{{ i+1 }}_{{ n+1 }}">{{ n+1 }}:</label>
+                                <input
+                                    name="correct{{ i+1 }}"
+                                    class="field"
+                                    type="radio"
+                                    value="correct{{ n+1 }}"
+                                />
+                            {% endfor %}
+                        </div>
                     {% endif %}
                         </li>
                     <hr>

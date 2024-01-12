@@ -9,7 +9,7 @@
 - Store Q&A in DB
 
 
-Added error message for Qs&As in create.html, started work on filled Qs&As persistent.
++ buttons for clicking correct answers in multi. +  bool & multi answers persistent.
 
 
 from flask import request

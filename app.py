@@ -282,18 +282,39 @@ def create():
 def submit():
     """Stores the quiz in DB and redirects to said quiz page"""
 
-    quiz_data = session.pop("quiz_data", None)
-    print(quiz_data)
+    quiz_data = session["quiz_data"]
+
+    questions = []
+    for i in range(quiz_data["amount"]):
+        questions.append(request.form.get(f"question{i+1}"))
+
+    if quiz_data["type"] == "bool":
+        answers = []
+        for i in range(quiz_data["amount"]):
+            answers.append(request.form.get(f"bool{i+1}"))
+
+
+    elif quiz_data["type"] == "multi":
+        answers = []
+        for i in range(quiz_data["amount"]):
+            answers_ = []
+            for j in range(3):
+                answers_.append(request.form.get(f"answer{i+1}_{j+1}"))
+            answers.append(answers_)
+
+    print(answers)
 
     for i in range(quiz_data["amount"]):
-        question = request.form.get(f"question{i+1}")
-        print((i+1),":", question)
-
-        if not question:
-            flash("Must fill in all the questions.", "failSubmit")
-            return render_template("create.html", amount=quiz_data["amount"], quiztype=quiz_data["type"], title=quiz_data["title"], checked=quiz_data["type"], categories=categories)
-
-
+        if not questions[i]:
+            flash("Please fill in all the questions.", "failSubmit")
+            return render_template("create.html", amount=quiz_data["amount"], quiztype=quiz_data["type"], title=quiz_data["title"], checked=quiz_data["type"], categories=categories, questions=questions, answers=answers)
+        
+        for j in range(3):
+            if not answers[i][j]:
+                flash("Please select/fill in all answers", "failSubmit")
+                return render_template("create.html", amount=quiz_data["amount"], quiztype=quiz_data["type"], title=quiz_data["title"], checked=quiz_data["type"], categories=categories, questions=questions, answers=answers)
+        
+    session.pop("quiz_data", None)
 
     # insert_db("INSERT INTO quizzes (title, category, creator_id) VALUES (?, ?, ?)", [request.form.get("title"), request.form.get("category"), session["user_id"]])
     
