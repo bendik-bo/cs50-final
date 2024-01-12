@@ -293,7 +293,6 @@ def submit():
         for i in range(quiz_data["amount"]):
             answers.append(request.form.get(f"bool{i+1}"))
 
-
     elif quiz_data["type"] == "multi":
         answers = []
         for i in range(quiz_data["amount"]):
@@ -309,8 +308,12 @@ def submit():
             flash("Please fill in all the questions.", "failSubmit")
             return render_template("create.html", amount=quiz_data["amount"], quiztype=quiz_data["type"], title=quiz_data["title"], checked=quiz_data["type"], categories=categories, questions=questions, answers=answers)
         
-        for j in range(3):
-            if not answers[i][j]:
+        if quiz_data["type"] == "multi":
+            for j in range(3):
+                if not answers[i][j]:
+                    flash("Please select/fill in all answers", "failSubmit")
+                return render_template("create.html", amount=quiz_data["amount"], quiztype=quiz_data["type"], title=quiz_data["title"], checked=quiz_data["type"], categories=categories, questions=questions, answers=answers)
+        elif not answers[i]:
                 flash("Please select/fill in all answers", "failSubmit")
                 return render_template("create.html", amount=quiz_data["amount"], quiztype=quiz_data["type"], title=quiz_data["title"], checked=quiz_data["type"], categories=categories, questions=questions, answers=answers)
         
