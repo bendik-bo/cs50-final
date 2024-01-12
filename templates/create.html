@@ -26,7 +26,9 @@ Create Quiz
                 id="bool"
                 type="radio"
                 value="bool"
-                {% if checked == "bool" %}checked{% endif %}
+                {% if quiztype %}
+                    {% if quiztype == "bool" %}checked{% endif %}
+                {% endif %}
             />
             <label for="bool">True/False</label>
             <input
@@ -34,15 +36,19 @@ Create Quiz
                 id="multiple"
                 type="radio"
                 value="multi"
-                {% if checked == "multi" %}checked{% endif %}
-            />
+                {% if quiztype %}
+                    {% if quiztype == "multi" %}checked{% endif %}
+                {% endif %}
+            />  
             <label for="multi">Multiple Options</label>
             <input
                 name="quiztype"
                 id="enter"
                 type="radio"
                 value="enter"
-                {% if checked == "enter" %}checked{% endif %}
+                {% if quiztype %}
+                    {% if quiztype == "enter" %}checked{% endif %}
+                {% endif %}
             />
             <label for="enter">Enter Answer</label> 
             <label class="create-label" for="category">Category:</label>

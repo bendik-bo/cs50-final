@@ -9,7 +9,9 @@
 - Store Q&A in DB
 
 
-+ buttons for clicking correct answers in multi. +  bool & multi answers persistent.
+To fix: 
+- No error message on generate
+- Generates questsions when only given numbers
 
 
 from flask import request

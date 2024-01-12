@@ -233,46 +233,41 @@ def create():
         amount = request.form.get("amount")
         time = request.form.get("time")
 
-        if not title:
-            flash("Title field cannot be empty.", "failCreate")
-            return redirect("/create")
-        
-        if len(title) > 50:
-            flash("Title cannot be longer than 50 characters.", "failCreate")
-            return redirect("/create")
+        def validate_create(title, quiztype, amount):
+            if not title:
+                flash("Title field cannot be empty.", "failCreate")
+                return False
+            if len(title) > 50:
+                flash("Title cannot be longer than 50 characters.", "failCreate")
+                return False
+            if not quiztype:
+                flash("You must choose a quiz type.", "failCreate")
+                return False
+            if not amount:
+                flash("You must specify amount of questions.", "failCreate")
+                return False
+            if amount > 30:
+                flash("Number of questions cannot exceed 3.0", "failCreate")
+                return False
+            return True
+            
+        if amount:
+            try: 
+                amount = int(amount)
+            except ValueError:
+                flash("Invalid datatype in 'number of questions'.", "failCreate")
+                return render_template("create.html", title=title, quiztype=quiztype, categories=categories)
 
-        if not quiztype:
-            flash("You must choose a quiz type.", "failCreate")
-            return render_template("create.html", title=title, categories=categories)
-
-        if quiztype == "bool":
-            checked = "bool"
-        elif quiztype == "multi":
-            checked = "multi"
-        elif quiztype == "enter":
-            checked = "enter"
-        
-        if not amount:
-            flash("You must specify amount of questions.", "failCreate")
-            return render_template("create.html", title=title, checked=checked, categories=categories)
-        
-        try: 
-            amount = int(amount)
-        except ValueError:
-            print("Error converting question amount into integer.")
-
-        if amount > 30:
-            flash("Number of questions cannot exceed 30", "failCreate")
-            return render_template("create.html", title=title, checked=checked, categories=categories)
-
-        session["quiz_data"] = {
-            "title": title,
-            "category": category,
-            "type": quiztype,
-            "amount": amount
-        }
-
-        return render_template("create.html", amount=amount, quiztype=quiztype, title=title, checked=checked, categories=categories)
+        if not validate_create(title, quiztype, amount):
+            return render_template("create.html", title=title, quiztype=quiztype, amount=amount, categories=categories)
+        else:    
+            session["quiz_data"] = {
+                "title": title,
+                "category": category,
+                "type": quiztype,
+                "amount": amount
+            }
+            return render_template("create.html", title=title, quiztype=quiztype, amount=amount, categories=categories)
     else: 
         return render_template("create.html", categories=categories)
 
@@ -288,37 +283,39 @@ def submit():
     for i in range(quiz_data["amount"]):
         questions.append(request.form.get(f"question{i+1}"))
 
+    answers = []
     if quiz_data["type"] == "bool":
-        answers = []
         for i in range(quiz_data["amount"]):
             answers.append(request.form.get(f"bool{i+1}"))
 
     elif quiz_data["type"] == "multi":
-        answers = []
         for i in range(quiz_data["amount"]):
             answers_ = []
             for j in range(3):
                 answers_.append(request.form.get(f"answer{i+1}_{j+1}"))
             answers.append(answers_)
 
-    print(answers)
-
-    for i in range(quiz_data["amount"]):
-        if not questions[i]:
-            flash("Please fill in all the questions.", "failSubmit")
-            return render_template("create.html", amount=quiz_data["amount"], quiztype=quiz_data["type"], title=quiz_data["title"], checked=quiz_data["type"], categories=categories, questions=questions, answers=answers)
-        
-        if quiz_data["type"] == "multi":
-            for j in range(3):
-                if not answers[i][j]:
-                    flash("Please select/fill in all answers", "failSubmit")
-                return render_template("create.html", amount=quiz_data["amount"], quiztype=quiz_data["type"], title=quiz_data["title"], checked=quiz_data["type"], categories=categories, questions=questions, answers=answers)
-        elif not answers[i]:
+    def validate_submit(questions, quiztype, answer):
+        for i in range(quiz_data["amount"]):
+            if not questions[i]:
+                flash("Please fill in all the questions.", "failSubmit")
+                return False
+            
+            if quiztype == "multi":
+                for j in range(3):
+                    if not answers[i][j]:
+                        flash("Please select/fill in all answers", "failSubmit")
+                        return False
+                    
+            elif not answers[i]:
                 flash("Please select/fill in all answers", "failSubmit")
-                return render_template("create.html", amount=quiz_data["amount"], quiztype=quiz_data["type"], title=quiz_data["title"], checked=quiz_data["type"], categories=categories, questions=questions, answers=answers)
-        
-    session.pop("quiz_data", None)
+                return False
+        return True
+                
+    if not validate_submit(questions, quiz_data["type"], answers):
+        return render_template("create.html", amount=quiz_data["amount"], quiztype=quiz_data["type"], title=quiz_data["title"], categories=categories, questions=questions, answers=answers)
 
+    session.pop("quiz_data", None)
     # insert_db("INSERT INTO quizzes (title, category, creator_id) VALUES (?, ?, ?)", [request.form.get("title"), request.form.get("category"), session["user_id"]])
     
     return render_template("create.html")
