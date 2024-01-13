@@ -1,6 +1,4 @@
-Max length on title, Qs and As in html
-Max length on Qs and As in python
-Add collection of enter answers in python
+Add ids so they match with labels
 
 Title: 	100 chars
 Qs: 	255 chars
@@ -21,7 +19,7 @@ Only positive numbers on amount
 
 
 Commit msg:
-Replaced "if amount" in html to "if generate_question", and change some ifs to elif 
-Fixed: Amount must be higher than "0".
-Added max length to Qs&As in create.html and app.py.
-
+Added function to collect enters answers in submit route.
+Persistent answer in enter in create.html.
+Removed comments from login route.
+Still working on making correct answer radio persistent.

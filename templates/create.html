@@ -15,7 +15,6 @@ Create Quiz
                 class="field"
                 type="text"
                 value="{{ title }}"
-                placeholder="Max 50 characters"
                 maxlength="100"
             />
         </div>
@@ -140,6 +139,7 @@ Create Quiz
                             class="field"
                             type="text"
                             maxlength="100"
+                            {% if answers %}value="{{ answers[i] }}"{% endif %}
                             />
                             {% endif %}
                     </div>
@@ -152,7 +152,9 @@ Create Quiz
                                     class="field"
                                     type="text"
                                     maxlength="100"
-                                    {% if answers %}value="{{ answers[i][j] }}"{% endif %}
+                                    {% if answers %}
+                                        value="{{ answers[i][j] }}"
+                                    {% endif %}
                                 />
                             {% endfor %}
                         </div>
@@ -161,10 +163,14 @@ Create Quiz
                             {% for n in range(3) %}
                                 <label class="create-label" for="correct{{ i+1 }}_{{ n+1 }}">{{ n+1 }}:</label>
                                 <input
-                                    name="correct{{ i+1 }}"
+                                    name="correct{{ n+1 }}"
+                                    id="correct{{ i+1 }}_{{ n+1 }}"
                                     class="field"
                                     type="radio"
-                                    value="correct{{ n+1 }}"
+                                    value="option{{ n+1 }}"
+                                    {% if correct_option and correct_option[i] == "option1" %}
+                                        checked
+                                    {% endif %}
                                 />
                             {% endfor %}
                         </div>

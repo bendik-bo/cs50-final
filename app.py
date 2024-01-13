@@ -90,32 +90,26 @@ def signup():
 def login():
     """Log user in"""
 
-    # Forget any user_id
     session.clear()
 
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
 
-        # Ensure username was submitted
         if not username:
             flash("Please fill in a username", "failUsername")
             return redirect("/login")
 
-        # Ensure password was submitted
         elif not password:
             flash("Please fill in a password", "failPassword")
             return render_template("login.html", username=username)
 
-        # Query database for username
         rows = query_db("SELECT * FROM users WHERE username = ?", [username])
 
-        # Ensure username exists and password is correct
         if len(rows) != 1 or not check_password_hash(rows[0]["password_hash"], password):
             flash("Incorrect username or password", "failUsername")
             return render_template("login.html", username=username)
 
-        # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
 
         return redirect("/")
@@ -285,15 +279,20 @@ def submit():
     """Stores the quiz in DB and redirects to said quiz page"""
 
     quiz_data = session["quiz_data"]
-
     questions = []
+    answers = []
+    correct_option = []
+
     for i in range(quiz_data["amount"]):
         questions.append(request.form.get(f"question{i+1}"))
 
-    answers = []
     if quiz_data["type"] == "bool":
         for i in range(quiz_data["amount"]):
             answers.append(request.form.get(f"bool{i+1}"))
+
+    elif quiz_data["type"] == "enter":
+        for i in range(quiz_data["amount"]):
+            answers.append(request.form.get(f"answer{i+1}"))
 
     elif quiz_data["type"] == "multi":
         for i in range(quiz_data["amount"]):
@@ -301,8 +300,9 @@ def submit():
             for j in range(3):
                 answers_.append(request.form.get(f"answer{i+1}_{j+1}"))
             answers.append(answers_)
+            correct_option.append(request.form.get(f"correct{i+1}"))
 
-    def validate_submit(questions, quiztype, answer):
+    def validate_submit(questions, quiztype, answers):
         for i in range(quiz_data["amount"]):
             if not questions[i]:
                 flash("Please fill in all the questions.", "failSubmit")
@@ -317,10 +317,14 @@ def submit():
                     if not answers[i][j]:
                         flash("Please select/fill in all answers", "failSubmit")
                         return False
-                    elif answers[i][j] > 100:
+                    elif len(answers[i][j]) > 100:
                         flash("Max answer length is 100 characters.", "failSubmit")
                         return False
-                    
+                if not correct_option[i]:
+                    flash("Please select a correct answer for each question.", "failSubmit")
+                    return False
+
+
             else:
                 if not answers[i]:
                     flash("Please select/fill in all answers", "failSubmit")
@@ -328,11 +332,13 @@ def submit():
                 elif len(answers[i]) > 100:
                     flash("Max answer length is 100 characters.", "failSubmit")
                     return False
-
         return True
+    
+    print(correct_option)
+    print(type(correct_option))
                 
     if not validate_submit(questions, quiz_data["type"], answers):
-        return render_template("create.html", amount=quiz_data["amount"], quiztype=quiz_data["type"], title=quiz_data["title"], categories=CATEGORIES, questions=questions, answers=answers, generate_questions=True)
+        return render_template("create.html", amount=quiz_data["amount"], quiztype=quiz_data["type"], title=quiz_data["title"], categories=CATEGORIES, questions=questions, answers=answers, generate_questions=True, correct_option=correct_option)
 
     session.pop("quiz_data", None)
     # insert_db("INSERT INTO quizzes (title, category, creator_id) VALUES (?, ?, ?)", [request.form.get("title"), request.form.get("category"), session["user_id"]])
