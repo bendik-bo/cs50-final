@@ -16,7 +16,7 @@ Create Quiz
                 type="text"
                 value="{{ title }}"
                 placeholder="Max 50 characters"
-                maxlength="50"
+                maxlength="100"
             />
         </div>
         <div class="field-row">
@@ -93,7 +93,7 @@ Create Quiz
         </div>
     </form>
     <form action="/submit" method="POST">
-        {% if amount %}
+        {% if generate_questions %}
             <ul>
                 {% for i in range(amount) %}
                     <div class="field-row center">
@@ -103,6 +103,7 @@ Create Quiz
                             name="question{{ i+1 }}"
                             class="field"
                             type="text"
+                            maxlength="255"
                             {% if questions %}
                             value="{{ questions[i] }}"
                             {% endif %}
@@ -138,6 +139,7 @@ Create Quiz
                             name="answer{{ i+1 }}"
                             class="field"
                             type="text"
+                            maxlength="100"
                             />
                             {% endif %}
                     </div>
@@ -149,6 +151,7 @@ Create Quiz
                                     name="answer{{ i+1 }}_{{ j+1 }}"
                                     class="field"
                                     type="text"
+                                    maxlength="100"
                                     {% if answers %}value="{{ answers[i][j] }}"{% endif %}
                                 />
                             {% endfor %}

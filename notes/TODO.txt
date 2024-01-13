@@ -1,5 +1,10 @@
 Max length on title, Qs and As in html
 Max length on Qs and As in python
+Add collection of enter answers in python
+
+Title: 	100 chars
+Qs: 	255 chars
+As: 	100 chars
 
 - Retrieve Q&A in Submit route
 
@@ -12,8 +17,11 @@ Max length on Qs and As in python
 
 
 To fix: 
-- Generates questsions when only given numbers
+Only positive numbers on amount
 
-Replaced check for file in upload with try & except, so it checks for KeyError if file not present.
-Added functions to check file size (helper.py) and verify size does not exceed limit(app.py).
+
+Commit msg:
+Replaced "if amount" in html to "if generate_question", and change some ifs to elif 
+Fixed: Amount must be higher than "0".
+Added max length to Qs&As in create.html and app.py.
 

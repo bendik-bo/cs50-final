@@ -195,11 +195,11 @@ def upload():
             flash("No selected file", "failUpload")
             return redirect("/profile")
 
-        if not allowed_file(file.filename):
+        elif not allowed_file(file.filename):
             flash("Invalid file type", "failUpload")
             return redirect("/profile")
         
-        if file_size(file) > MAX_FILE_SIZE:
+        elif file_size(file) > MAX_FILE_SIZE:
             flash("File size exceeds the allowed limit.", "failUpload")
             return redirect("/profile")
 
@@ -243,19 +243,20 @@ def create():
             if not title:
                 flash("Title field cannot be empty.", "failCreate")
                 return False
-            if len(title) > 50:
+            elif len(title) > 100:
                 flash("Title cannot be longer than 50 characters.", "failCreate")
                 return False
-            if not quiztype:
+            elif not quiztype:
                 flash("You must choose a quiz type.", "failCreate")
                 return False
-            if not amount:
+            elif not amount:
                 flash("You must specify amount of questions.", "failCreate")
                 return False
-            if amount > 30:
-                flash("Number of questions cannot exceed 3.0", "failCreate")
+            elif amount > 30 or amount < 1:
+                flash("Invalid number of questions.", "failCreate")
                 return False
-            return True
+            else:
+                return True
             
         if amount:
             try: 
@@ -266,14 +267,14 @@ def create():
 
         if not validate_create(title, quiztype, amount):
             return render_template("create.html", title=title, quiztype=quiztype, amount=amount, categories=CATEGORIES)
-        else:    
+        else:
             session["quiz_data"] = {
                 "title": title,
                 "category": category,
                 "type": quiztype,
                 "amount": amount
             }
-            return render_template("create.html", title=title, quiztype=quiztype, amount=amount, categories=CATEGORIES)
+            return render_template("create.html", title=title, quiztype=quiztype, amount=amount, categories=CATEGORIES, generate_questions=True)
     else: 
         return render_template("create.html", categories=CATEGORIES)
 
@@ -306,20 +307,32 @@ def submit():
             if not questions[i]:
                 flash("Please fill in all the questions.", "failSubmit")
                 return False
+
+            elif len(questions[i]) > 255:
+                flash("Max question length is 255 characters.", "failSubmit")
+                return False
             
             if quiztype == "multi":
                 for j in range(3):
                     if not answers[i][j]:
                         flash("Please select/fill in all answers", "failSubmit")
                         return False
+                    elif answers[i][j] > 100:
+                        flash("Max answer length is 100 characters.", "failSubmit")
+                        return False
                     
-            elif not answers[i]:
-                flash("Please select/fill in all answers", "failSubmit")
-                return False
+            else:
+                if not answers[i]:
+                    flash("Please select/fill in all answers", "failSubmit")
+                    return False
+                elif len(answers[i]) > 100:
+                    flash("Max answer length is 100 characters.", "failSubmit")
+                    return False
+
         return True
                 
     if not validate_submit(questions, quiz_data["type"], answers):
-        return render_template("create.html", amount=quiz_data["amount"], quiztype=quiz_data["type"], title=quiz_data["title"], categories=CATEGORIES, questions=questions, answers=answers)
+        return render_template("create.html", amount=quiz_data["amount"], quiztype=quiz_data["type"], title=quiz_data["title"], categories=CATEGORIES, questions=questions, answers=answers, generate_questions=True)
 
     session.pop("quiz_data", None)
     # insert_db("INSERT INTO quizzes (title, category, creator_id) VALUES (?, ?, ?)", [request.form.get("title"), request.form.get("category"), session["user_id"]])
