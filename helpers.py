@@ -3,6 +3,8 @@ import sqlite3
 from flask import redirect, session, g
 from functools import wraps
 
+ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png", "gif"}
+
 def login_required(f):
     """Decorate routes to require login."""
     @wraps(f)
@@ -36,10 +38,16 @@ def insert_db(query, args=()):
     get_db().execute(query, args)
     get_db().commit()
 
-
-ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png", "gif"}
-
+# File upload
 def allowed_file(filename):
     """Check if image has an allowed extension"""
     
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def file_size(file):
+    """Checks file size"""
+
+    file.seek(0, 2)
+    size = file.tell()
+    file.seek(0)
+    return size

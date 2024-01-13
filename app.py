@@ -6,11 +6,13 @@ from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 
-from helpers import login_required, DATABASE, query_db, insert_db, allowed_file
+from helpers import login_required, DATABASE, query_db, insert_db, allowed_file, file_size
 
 USER_IMAGES = "./static/images/users/"
 DEFAULT_AVATAR = "./static/images/Default-profile.jpg"
-categories = ["General Knowledge", "Science", "Technology", "Nature", "History", "Geography", "Pop Culture", "Music", "Movies & TV", "Sports", "Literature", "Food", "Other"]
+MAX_FILE_SIZE = 5 * 1024 * 1024
+CATEGORIES = ["General Knowledge", "Science", "Technology", "Nature", "History", "Geography", "Pop Culture", "Music", "Movies & TV", "Sports", "Literature", "Food", "Other"]
+
 
 app = Flask(__name__)
 
@@ -18,7 +20,7 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = "nf0{8/%+8z0cd%$n[eq4ve7ab7)@6"
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
-app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024
+app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024
 app.config["USER_IMAGES"] = USER_IMAGES
 
 @app.after_request
@@ -183,11 +185,11 @@ def upload():
     """Upload image/avatar"""
     
     if request.method == "POST":
-        if "file" not in request.files:
-            flash("No file part", "failUpload")
+        try: 
+            file = request.files["file"]
+        except KeyError:
+            flash("No file part." "failUpload")
             return redirect("/profile")
-        
-        file = request.files["file"]
 
         if file.filename == "":
             flash("No selected file", "failUpload")
@@ -195,6 +197,10 @@ def upload():
 
         if not allowed_file(file.filename):
             flash("Invalid file type", "failUpload")
+            return redirect("/profile")
+        
+        if file_size(file) > MAX_FILE_SIZE:
+            flash("File size exceeds the allowed limit.", "failUpload")
             return redirect("/profile")
 
         if file:
@@ -256,10 +262,10 @@ def create():
                 amount = int(amount)
             except ValueError:
                 flash("Invalid datatype in 'number of questions'.", "failCreate")
-                return render_template("create.html", title=title, quiztype=quiztype, categories=categories)
+                return render_template("create.html", title=title, quiztype=quiztype, categories=CATEGORIES)
 
         if not validate_create(title, quiztype, amount):
-            return render_template("create.html", title=title, quiztype=quiztype, amount=amount, categories=categories)
+            return render_template("create.html", title=title, quiztype=quiztype, amount=amount, categories=CATEGORIES)
         else:    
             session["quiz_data"] = {
                 "title": title,
@@ -267,9 +273,9 @@ def create():
                 "type": quiztype,
                 "amount": amount
             }
-            return render_template("create.html", title=title, quiztype=quiztype, amount=amount, categories=categories)
+            return render_template("create.html", title=title, quiztype=quiztype, amount=amount, categories=CATEGORIES)
     else: 
-        return render_template("create.html", categories=categories)
+        return render_template("create.html", categories=CATEGORIES)
 
 
 @app.route("/submit", methods=["POST"])
@@ -313,7 +319,7 @@ def submit():
         return True
                 
     if not validate_submit(questions, quiz_data["type"], answers):
-        return render_template("create.html", amount=quiz_data["amount"], quiztype=quiz_data["type"], title=quiz_data["title"], categories=categories, questions=questions, answers=answers)
+        return render_template("create.html", amount=quiz_data["amount"], quiztype=quiz_data["type"], title=quiz_data["title"], categories=CATEGORIES, questions=questions, answers=answers)
 
     session.pop("quiz_data", None)
     # insert_db("INSERT INTO quizzes (title, category, creator_id) VALUES (?, ?, ?)", [request.form.get("title"), request.form.get("category"), session["user_id"]])
