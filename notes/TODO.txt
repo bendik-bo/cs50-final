@@ -17,6 +17,11 @@ As: 	100 chars
 To fix: 
 Only positive numbers on amount
 
+Git comment:
+Finally made radio inputs in multi (create.html) persistent.
+Only accepts positive nrs in amount.
+Fixed ids to they match labels.
+
 
 Commit msg:
 Added function to collect enters answers in submit route.
