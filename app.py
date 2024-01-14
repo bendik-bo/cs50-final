@@ -6,7 +6,7 @@ from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 
-from helpers import login_required, DATABASE, query_db, insert_db, allowed_file, file_size
+from helpers import login_required, query_db, insert_db, allowed_file, file_size, validate_create, validate_submit
 
 USER_IMAGES = "./static/images/users/"
 DEFAULT_AVATAR = "./static/images/Default-profile.jpg"
@@ -233,25 +233,7 @@ def create():
         amount = request.form.get("amount")
         time = request.form.get("time")
 
-        def validate_create(title, quiztype, amount):
-            if not title:
-                flash("Title field cannot be empty.", "failCreate")
-                return False
-            elif len(title) > 100:
-                flash("Title cannot be longer than 50 characters.", "failCreate")
-                return False
-            elif not quiztype:
-                flash("You must choose a quiz type.", "failCreate")
-                return False
-            elif not amount:
-                flash("You must specify amount of questions.", "failCreate")
-                return False
-            elif amount > 30 or amount < 1:
-                flash("Invalid number of questions.", "failCreate")
-                return False
-            else:
-                return True
-            
+
         if amount:
             try: 
                 amount = int(amount)
@@ -300,47 +282,33 @@ def submit():
             for j in range(3):
                 answers_.append(request.form.get(f"answer{i+1}_{j+1}"))
             answers.append(answers_)
-            correct_option.append(request.form.get(f"correct{i+1}"))
+            correct_option.append(int(request.form.get(f"correct{i+1}")))
 
-    def validate_submit(questions, quiztype, answers):
-        for i in range(quiz_data["amount"]):
-            if not questions[i]:
-                flash("Please fill in all the questions.", "failSubmit")
-                return False
-
-            elif len(questions[i]) > 255:
-                flash("Max question length is 255 characters.", "failSubmit")
-                return False
-            
-            if quiztype == "multi":
-                for j in range(3):
-                    if not answers[i][j]:
-                        flash("Please select/fill in all answers", "failSubmit")
-                        return False
-                    elif len(answers[i][j]) > 100:
-                        flash("Max answer length is 100 characters.", "failSubmit")
-                        return False
-                if not correct_option[i]:
-                    flash("Please select a correct answer for each question.", "failSubmit")
-                    return False
-
-
-            else:
-                if not answers[i]:
-                    flash("Please select/fill in all answers", "failSubmit")
-                    return False
-                elif len(answers[i]) > 100:
-                    flash("Max answer length is 100 characters.", "failSubmit")
-                    return False
-        return True
-    
-    print(correct_option)
-    print(type(correct_option))
+    print(type(correct_option[0]), correct_option)
                 
-    if not validate_submit(questions, quiz_data["type"], answers):
+    if not validate_submit(quiz_data["amount"], questions, quiz_data["type"], answers, correct_option):
         return render_template("create.html", amount=quiz_data["amount"], quiztype=quiz_data["type"], title=quiz_data["title"], categories=CATEGORIES, questions=questions, answers=answers, generate_questions=True, correct_option=correct_option)
 
     session.pop("quiz_data", None)
+
+    
+
+
+    # quiz_id = insert_db("INSERT INTO quizzes (title, category, creator_id) VALUES (?, ?, ?)", [quiz_data["title"], quiz_data["category"], session["user_id"]])
+
+    # for i in range(quiz_data["amount"]):
+    #     question_id = insert_db("INSERT INTO questions (quiz_id, question) VALUES (?, ?)", [questions[i], quiz_id])
+        
+    #     if quiz_data["type"] == "multi":
+    #         for j in range(3):
+    #             if j == 
+    #             insert_db("INSERT INTO answers (question_id, answer) VALUES (?, ?)", [question_id, answers[i]])
+    #     elif quiz_data["type"] == "bool"
+    #         insert_db("INSERT INTO answers (question_id, bool) VALUES (?, ?)", [question_id, answers[i]])
+    #     else:
+
+
+
     # insert_db("INSERT INTO quizzes (title, category, creator_id) VALUES (?, ?, ?)", [request.form.get("title"), request.form.get("category"), session["user_id"]])
     
     return render_template("create.html")

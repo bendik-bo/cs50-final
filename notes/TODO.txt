@@ -1,26 +1,45 @@
-Add ids so they match with labels
+Insert information into database:
 
-Title: 	100 chars
-Qs: 	255 chars
-As: 	100 chars
+table quizzes:
+	title
+	category
+	creator_id
 
-- Retrieve Q&A in Submit route
+table questions:
+	quiz_id (references quizzes(id)
+	question
 
-- Check all Q&A filled in
-	Send the ones filled in back, so it doesn't get removed on submit click
-
-- Store Q&A in session
-
-- Store Q&A in DB
-
+table answers:
+	question_id (references questions(id)
+	answer
+	bool
 
 To fix: 
-Only positive numbers on amount
+Move signup validation into helpers.py
+
+Remove autofill from Qs and As.
+
+Questions: replaced input type=text:
+<textarea name="message" rows="4" cols="50">
+Enter text here...
+</textarea>
+
+
+Transaction Management: Currently, your database operations are executed 
+independently. It's important to consider wrapping these operations in a 
+transaction to ensure data integrity. If one of the insertions fails 
+(due to a database error, for instance), you don’t want to have partial data 
+inserted. This is especially important when you have related data across 
+multiple tables.
+
+Error Handling: It's always a good practice to include error handling 
+when interacting with databases to catch any exceptions that might occur 
+during the query execution. This helps in gracefully handling errors and 
+also in debugging issues related to database operations.
+
 
 Git comment:
-Finally made radio inputs in multi (create.html) persistent.
-Only accepts positive nrs in amount.
-Fixed ids to they match labels.
+Moved validate create & submit functions into helper.py.
 
 
 Commit msg:

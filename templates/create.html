@@ -166,19 +166,17 @@ Create Quiz
                         <div class="field-row">
                             <h2>Correct answer:</h2>
                             {% for n in range(3) %}
-                                {% set option = "option" ~ (n+1)|string %}
                                 <label class="create-label" for="correct{{ i+1 }}_{{ n+1 }}">{{ n+1 }}:</label>
                                 <input
                                     name="correct{{ i+1 }}"
                                     id="correct{{ i+1 }}_{{ n+1 }}"
                                     class="field"
                                     type="radio"
-                                    value="{{ option }}"
-                                    {% if correct_option and correct_option[i] == option %}
+                                    value="{{ n+1 }}"
+                                    {% if correct_option and correct_option[i] == n+1 %}
                                             checked
                                     {% endif %}
                                 />
-                                <p>{{ option }}</p>
                             {% endfor %}
                         </div>
                     {% endif %}
