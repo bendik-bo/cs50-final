@@ -21,6 +21,7 @@ DATABASE = "database.db"
 
 def get_db():
     """Establish database connection for request"""
+    
     db = getattr(g, "_database", None)
     if db is None:
         db = g._database = sqlite3.connect(DATABASE)
@@ -29,19 +30,19 @@ def get_db():
 
 def query_db(query, args=(), one=False):
     """Query the database"""
+
     cur = get_db().execute(query, args)
     rv = cur.fetchall()
     cur.close()
     return (rv[0] if rv else None) if one else rv
 
-def insert_db(db, query, args=(), commit=True):
+def insert_db(db, query, args=()):
     """Insert into the database"""
+
     cur = db.execute(query, args)
     lastrowid = cur.lastrowid
     cur.close()
-    if commit:
-        db.commit()
-        return lastrowid
+    return lastrowid
 
 # File upload
 def allowed_file(filename):
