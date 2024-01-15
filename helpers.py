@@ -34,13 +34,14 @@ def query_db(query, args=(), one=False):
     cur.close()
     return (rv[0] if rv else None) if one else rv
 
-def insert_db(query, args=()):
+def insert_db(db, query, args=(), commit=True):
     """Insert into the database"""
-    cur = get_db().execute(query, args)
+    cur = db.execute(query, args)
     lastrowid = cur.lastrowid
-    get_db().commit()
     cur.close()
-    return lastrowid
+    if commit:
+        db.commit()
+        return lastrowid
 
 # File upload
 def allowed_file(filename):

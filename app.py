@@ -1,3 +1,4 @@
+import sqlite3
 import os
 from os import path
 
@@ -6,7 +7,7 @@ from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 
-from helpers import login_required, query_db, insert_db, allowed_file, file_size, validate_create, validate_submit
+from helpers import login_required, get_db, query_db, insert_db, allowed_file, file_size, validate_create, validate_submit
 
 USER_IMAGES = "./static/images/users/"
 DEFAULT_AVATAR = "./static/images/Default-profile.jpg"
@@ -288,25 +289,35 @@ def submit():
         return render_template("create.html", amount=quiz_data["amount"], quiztype=quiz_data["type"], title=quiz_data["title"], categories=CATEGORIES, questions=questions, answers=answers, generate_questions=True, correct_option=correct_option)
 
     session.pop("quiz_data", None)
-    
-    quiz_id = insert_db("INSERT INTO quizzes (title, category, creator_id) VALUES (?, ?, ?)", [quiz_data["title"], quiz_data["category"], session["user_id"]])
 
-    for i in range(quiz_data["amount"]):
-        question_id = insert_db("INSERT INTO questions (quiz_id, question) VALUES (?, ?)", [quiz_id, questions[i]])
-        
-        if quiz_data["type"] == "multi":
-            for j in range(3):
-                if j+1 == correct_option[i]:
-                    insert_db("INSERT INTO answers (question_id, answer, is_correct) VALUES (?, ?, ?)", [question_id, answers[i][j], 1])
+    try:
+        db = get_db()
+        db.execute('BEGIN')
+
+        quiz_id = insert_db(db, "INSERT INTO quizzes (title, category, creator_id) VALUES (?, ?, ?)", [quiz_data["title"], quiz_data["category"], session["user_id"]])
+
+        for i in range(quiz_data["amount"]):
+            question_id = insert_db(db, "INSERT INTO questions (quiz_id, question) VALUES (?, ?)", [quiz_id, questions[i]])
+            
+            if quiz_data["type"] == "multi":
+                for j in range(3):
+                    if j+1 == correct_option[i]:
+                        insert_db(db, "INSERT INTO answers (question_id, answer, is_correct) VALUES (?, ?, ?)", [question_id, answers[i][j], 1])
+                    else:
+                        insert_db(db, "INSERT INTO answers (question_id, answer, is_correct) VALUES (?, ?, ?)", [question_id, answers[i][j], 0])
+            elif quiz_data["type"] == "bool":
+                if answers[i] == "true":
+                    insert_db(db, "INSERT INTO answers (question_id, is_correct) VALUES (?, ?)", [question_id, 1])
                 else:
-                    insert_db("INSERT INTO answers (question_id, answer, is_correct) VALUES (?, ?, ?)", [question_id, answers[i][j], 0])
-        elif quiz_data["type"] == "bool":
-            if answers[i] == "true":
-                insert_db("INSERT INTO answers (question_id, is_correct) VALUES (?, ?)", [question_id, 1])
+                    insert_db(db, "INSERT INTO answers (question_id, is_correct) VALUES (?, ?)", [question_id, 0])
             else:
-                insert_db("INSERT INTO answers (question_id, is_correct) VALUES (?, ?)", [question_id, 0])
-        else:
-            insert_db("INSERT INTO answers (question_id, answer) VALUES (?, ?)", [question_id, answers[i]])
+                insert_db(db, "INSERT INTO answers (question_id, answer) VALUES (?, ?)", [question_id, answers[i]])
+                
+        db.commit()
+    except sqlite3.Error as e:
+        db.rollback()
+        flash(f"An error occured when updating database: {e}", "failCreate")
+        return redirect("/create")
 
     
     return render_template("create.html")

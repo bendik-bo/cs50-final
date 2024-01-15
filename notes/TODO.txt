@@ -1,18 +1,4 @@
-Insert information into database:
-
-table quizzes:
-	title
-	category
-	creator_id
-
-table questions:
-	quiz_id (references quizzes(id)
-	question
-
-table answers:
-	question_id (references questions(id)
-	answer
-	bool
+Add transaction management to all DB insertions.
 
 To fix: 
 Move signup validation into helpers.py
