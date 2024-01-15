@@ -27,8 +27,8 @@ CREATE TABLE questions (
 
 CREATE TABLE answers (
 	id INTEGER PRIMARY KEY,
-	question_id INTEGER,
+	question_id INTEGER NOT NULL,
 	answer TEXT,
-	is_correct BOOLEAN NOT NULL
+	is_correct BOOLEAN,
 	FOREIGN KEY (question_id) REFERENCES questions(id)
 );
