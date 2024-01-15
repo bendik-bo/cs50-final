@@ -77,10 +77,17 @@ def signup():
             flash("Username already exists", "failUsername")
             return render_template("signup.html", username=username)
 
-        insert_db("INSERT INTO users (username, password_hash) VALUES (?, ?)", [username, generate_password_hash(password)])
-        result = query_db("SELECT id FROM users WHERE username = ?", [username], one=True)
-        id = result["id"]
-        insert_db("INSERT INTO images (user_id, url) VALUES (?, ?)", [id, DEFAULT_AVATAR])
+        try:    
+            db = get_db()
+            insert_db("INSERT INTO users (username, password_hash) VALUES (?, ?)", [username, generate_password_hash(password)])
+            result = query_db("SELECT id FROM users WHERE username = ?", [username], one=True)
+            id = result["id"]
+            insert_db("INSERT INTO images (user_id, url) VALUES (?, ?)", [id, DEFAULT_AVATAR])
+            db.commit()
+        except sqlite3.Error as e:
+            db.rollback()
+            flash(f"An error occured updating database: {e}", "failUsername")
+            return redirect("/signup")
 
         return render_template("login.html", username=username)
 
@@ -167,7 +174,10 @@ def changepass():
         if oldpass == password:
             flash("New password cannot be the same as previous.", "failNew")
         
-        insert_db("UPDATE users SET password_hash = ? WHERE id = ?",  [generate_password_hash(password), session["user_id"]])
+        db = get_db()
+        insert_db(db, "UPDATE users SET password_hash = ? WHERE id = ?",  [generate_password_hash(password), session["user_id"]])
+        db.commit()
+
         flash("Success! Your password has been updated.", "success")
         return redirect("/profile")
 
@@ -212,7 +222,10 @@ def upload():
 
             url = os.path.join(app.config["USER_IMAGES"], filename)
             file.save(url)
-            insert_db("UPDATE images SET url = ? WHERE user_id = ?", [url, session["user_id"]])
+
+            db = get_db()
+            insert_db(db, "UPDATE images SET url = ? WHERE user_id = ?", [url, session["user_id"]])
+            db.commit()
 
             flash("Upload successful", "success")
             return redirect("/profile")
@@ -312,7 +325,7 @@ def submit():
                     insert_db(db, "INSERT INTO answers (question_id, is_correct) VALUES (?, ?)", [question_id, 0])
             else:
                 insert_db(db, "INSERT INTO answers (question_id, answer) VALUES (?, ?)", [question_id, answers[i]])
-                
+
         db.commit()
     except sqlite3.Error as e:
         db.rollback()
