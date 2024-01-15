@@ -21,7 +21,7 @@ DATABASE = "database.db"
 
 def get_db():
     """Establish database connection for request"""
-    
+
     db = getattr(g, "_database", None)
     if db is None:
         db = g._database = sqlite3.connect(DATABASE)
@@ -59,6 +59,35 @@ def file_size(file):
     return size
 
 # Validation
+def validate_signup(username, password, confirm):
+    """Validate info recieve in signup route"""
+
+    if not username:
+        flash("Please fill in a username", "failUsername")
+        return False
+
+    elif not password or not confirm:
+        flash("Fill in both password-fields.", "failPassword")
+        return False
+
+    elif password != confirm:
+        flash("Passwords do not match.", "failPassword")
+        return False
+    
+    elif len(username) > 30 or len(username) < 3:
+        flash("Username must be between 3 and 20 characters long.", "failUsername")
+        return False
+    
+    elif len(password) < 8:
+        flash("Password must be atleast 8 characters long.", "failPassword")
+        return False
+
+    elif query_db("SELECT * FROM users WHERE username = ?", [username]):
+        flash("Username already exists", "failUsername")
+        return False
+    
+    return True
+
 def validate_create(title, quiztype, amount):
     """Validate info recieved in create route"""
 

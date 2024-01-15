@@ -12,10 +12,11 @@ main %}
           name="username"
           id="username"
           autocomplete="off"
-          autofocus
           class="field"
           type="text"
-          value="{{ username }}"
+          {% if username %}
+            value="{{ username }}"
+          {% endif %}
           />
       </div>
     </div>
@@ -60,7 +61,7 @@ main %}
       }}
     </span>
     {% endif %} {% endwith %}
-    <div class="field-row">
+    <div class="field-row center">
       <button class="field-btn" type="submit">Sign up!</button>
     </div>
   </div>

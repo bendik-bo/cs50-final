@@ -1,8 +1,5 @@
-Add transaction management to all DB insertions.
 
 To fix: 
-Move signup validation into helpers.py
-
 Remove autofill from Qs and As.
 
 Questions: replaced input type=text:
@@ -11,25 +8,6 @@ Enter text here...
 </textarea>
 
 
-Transaction Management: Currently, your database operations are executed 
-independently. It's important to consider wrapping these operations in a 
-transaction to ensure data integrity. If one of the insertions fails 
-(due to a database error, for instance), you don’t want to have partial data 
-inserted. This is especially important when you have related data across 
-multiple tables.
-
-Error Handling: It's always a good practice to include error handling 
-when interacting with databases to catch any exceptions that might occur 
-during the query execution. This helps in gracefully handling errors and 
-also in debugging issues related to database operations.
-
 
 Git comment:
-Updated upload, changepass and signup routes db insertion, added get_db and commit(+ error catcher for signup).
-
-
-Commit msg:
-Added function to collect enters answers in submit route.
-Persistent answer in enter in create.html.
-Removed comments from login route.
-Still working on making correct answer radio persistent.
+Added if username check to signup- and login.html. Moved signup validation into helpers.py. Removed autofocus from signup- and login.html. Removed autocomplete from questions and answers.

@@ -7,7 +7,7 @@ from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 
-from helpers import login_required, get_db, query_db, insert_db, allowed_file, file_size, validate_create, validate_submit
+from helpers import login_required, get_db, query_db, insert_db, allowed_file, file_size, validate_signup, validate_create, validate_submit
 
 USER_IMAGES = "./static/images/users/"
 DEFAULT_AVATAR = "./static/images/Default-profile.jpg"
@@ -52,43 +52,23 @@ def signup():
         username = request.form.get("username")
         password = request.form.get("password")
         confirm = request.form.get("confirm")
-
-        if not username:
-            flash("Please fill in a username", "failUsername")
-            return redirect("/signup")
-
-        if not password or not confirm:
-            flash("Fill in both password-fields.", "failPassword")
-            return render_template("signup.html", username=username)
-
-        if password != confirm:
-            flash("Passwords do not match.", "failPassword")
-            return render_template("signup.html", username=username)
         
-        if len(username) > 30 or len(username) < 3:
-            flash("Username must be between 3 and 20 characters long.", "failUsername")
-            return redirect("/signup")
-        
-        if len(password) < 8:
-            flash("Password must be atleast 8 characters long.", "failPassword")
-            return render_template("signup.html", username=username)
-  
-        if query_db("SELECT * FROM users WHERE username = ?", [username]):
-            flash("Username already exists", "failUsername")
+        if not validate_signup(username, password, confirm):
+            flash("failvalidate", "failPassword")
             return render_template("signup.html", username=username)
 
         try:    
             db = get_db()
-            insert_db("INSERT INTO users (username, password_hash) VALUES (?, ?)", [username, generate_password_hash(password)])
+            insert_db(db, "INSERT INTO users (username, password_hash) VALUES (?, ?)", [username, generate_password_hash(password)])
             result = query_db("SELECT id FROM users WHERE username = ?", [username], one=True)
             id = result["id"]
-            insert_db("INSERT INTO images (user_id, url) VALUES (?, ?)", [id, DEFAULT_AVATAR])
+            insert_db(db, "INSERT INTO images (user_id, url) VALUES (?, ?)", [id, DEFAULT_AVATAR])
             db.commit()
         except sqlite3.Error as e:
             db.rollback()
-            flash(f"An error occured updating database: {e}", "failUsername")
+            flash("An error occured updating database:", "failPassword")
             return redirect("/signup")
-
+                
         return render_template("login.html", username=username)
 
     else:

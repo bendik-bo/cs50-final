@@ -10,12 +10,13 @@ main %}
       <div class="field-row center">
         <input
           autocomplete="off"
-          autofocus
           class="field"
           id="username"
           name="username"
           type="text"
-          value="{{ username }}"
+          {% if username %}
+            value="{{ username }}"
+          {% endif %}
         />
       </div>
     </div>

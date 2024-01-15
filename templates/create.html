@@ -103,6 +103,7 @@ Create Quiz
                             id="question{{ i+1 }}"
                             class="field"
                             type="text"
+                            autocomplete="off"
                             maxlength="255"
                             {% if questions %}
                             value="{{ questions[i] }}"
@@ -142,6 +143,7 @@ Create Quiz
                             id="answer{{ i+1 }}"
                             class="field"
                             type="text"
+                            autocomplete="off"
                             maxlength="100"
                             {% if answers %}value="{{ answers[i] }}"{% endif %}
                             />
@@ -156,6 +158,7 @@ Create Quiz
                                     id="answer{{ i+1 }}_{{ j+1 }}"
                                     class="field"
                                     type="text"
+                                    autocomplete="off"
                                     maxlength="100"
                                     {% if answers %}
                                         value="{{ answers[i][j] }}"
