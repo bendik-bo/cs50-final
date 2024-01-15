@@ -283,33 +283,31 @@ def submit():
                 answers_.append(request.form.get(f"answer{i+1}_{j+1}"))
             answers.append(answers_)
             correct_option.append(int(request.form.get(f"correct{i+1}")))
-
-    print(type(correct_option[0]), correct_option)
                 
     if not validate_submit(quiz_data["amount"], questions, quiz_data["type"], answers, correct_option):
         return render_template("create.html", amount=quiz_data["amount"], quiztype=quiz_data["type"], title=quiz_data["title"], categories=CATEGORIES, questions=questions, answers=answers, generate_questions=True, correct_option=correct_option)
 
     session.pop("quiz_data", None)
-
     
+    quiz_id = insert_db("INSERT INTO quizzes (title, category, creator_id) VALUES (?, ?, ?)", [quiz_data["title"], quiz_data["category"], session["user_id"]])
 
-
-    # quiz_id = insert_db("INSERT INTO quizzes (title, category, creator_id) VALUES (?, ?, ?)", [quiz_data["title"], quiz_data["category"], session["user_id"]])
-
-    # for i in range(quiz_data["amount"]):
-    #     question_id = insert_db("INSERT INTO questions (quiz_id, question) VALUES (?, ?)", [questions[i], quiz_id])
+    for i in range(quiz_data["amount"]):
+        question_id = insert_db("INSERT INTO questions (quiz_id, question) VALUES (?, ?)", [quiz_id, questions[i]])
         
-    #     if quiz_data["type"] == "multi":
-    #         for j in range(3):
-    #             if j == 
-    #             insert_db("INSERT INTO answers (question_id, answer) VALUES (?, ?)", [question_id, answers[i]])
-    #     elif quiz_data["type"] == "bool"
-    #         insert_db("INSERT INTO answers (question_id, bool) VALUES (?, ?)", [question_id, answers[i]])
-    #     else:
+        if quiz_data["type"] == "multi":
+            for j in range(3):
+                if j+1 == correct_option[i]:
+                    insert_db("INSERT INTO answers (question_id, answer, is_correct) VALUES (?, ?, ?)", [question_id, answers[i][j], 1])
+                else:
+                    insert_db("INSERT INTO answers (question_id, answer, is_correct) VALUES (?, ?, ?)", [question_id, answers[i][j], 0])
+        elif quiz_data["type"] == "bool":
+            if answers[i] == "true":
+                insert_db("INSERT INTO answers (question_id, is_correct) VALUES (?, ?)", [question_id, 1])
+            else:
+                insert_db("INSERT INTO answers (question_id, is_correct) VALUES (?, ?)", [question_id, 0])
+        else:
+            insert_db("INSERT INTO answers (question_id, answer) VALUES (?, ?)", [question_id, answers[i]])
 
-
-
-    # insert_db("INSERT INTO quizzes (title, category, creator_id) VALUES (?, ?, ?)", [request.form.get("title"), request.form.get("category"), session["user_id"]])
     
     return render_template("create.html")
 
