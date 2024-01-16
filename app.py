@@ -276,7 +276,11 @@ def submit():
             for j in range(3):
                 answers_.append(request.form.get(f"answer{i+1}_{j+1}"))
             answers.append(answers_)
-            correct_option.append(int(request.form.get(f"correct{i+1}")))
+            try: 
+                correct_option.append(int(request.form.get(f"correct{i+1}")))
+            except TypeError:
+                correct_option.append(None)
+
                 
     if not validate_submit(quiz_data["amount"], questions, quiz_data["type"], answers, correct_option):
         return render_template("create.html", amount=quiz_data["amount"], quiztype=quiz_data["type"], title=quiz_data["title"], categories=CATEGORIES, questions=questions, answers=answers, generate_questions=True, correct_option=correct_option)
