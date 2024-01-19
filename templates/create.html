@@ -19,37 +19,49 @@ Create Quiz
             />
         </div>
         <div class="field-row">
-            <h2 class="create-label">Type:</h2>
-            <input
-                name="quiztype"
-                id="bool"
-                type="radio"
-                value="bool"
-                {% if quiztype %}
-                    {% if quiztype == "bool" %}checked{% endif %}
-                {% endif %}
-            />
-            <label for="bool">True/False</label>
-            <input
-                name="quiztype"
-                id="multi"
-                type="radio"
-                value="multi"
-                {% if quiztype %}
-                    {% if quiztype == "multi" %}checked{% endif %}
-                {% endif %}
-            />  
-            <label for="multi">Multiple Options</label>
-            <input
-                name="quiztype"
-                id="enter"
-                type="radio"
-                value="enter"
-                {% if quiztype %}
-                    {% if quiztype == "enter" %}checked{% endif %}
-                {% endif %}
-            />
-            <label for="enter">Enter Answer</label> 
+            <div class="radio-buttons">
+                <ul>
+                    <li>
+                        <h2 class="create-label">Type:</h2>
+                    </li>
+                    <li>
+                        <input
+                            name="quiztype"
+                            id="bool"
+                            type="radio"
+                            value="bool"
+                            {% if quiztype %}
+                                {% if quiztype == "bool" %}checked{% endif %}
+                            {% endif %}
+                        />
+                        <label for="bool">True/False</label>
+                    </li>
+                    <li>
+                        <input
+                            name="quiztype"
+                            id="multi"
+                            type="radio"
+                            value="multi"
+                            {% if quiztype %}
+                                {% if quiztype == "multi" %}checked{% endif %}
+                            {% endif %}
+                        />  
+                        <label for="multi">Multiple Options</label>
+                    </li>
+                    <li>
+                        <input
+                            name="quiztype"
+                            id="enter"
+                            type="radio"
+                            value="enter"
+                            {% if quiztype %}
+                                {% if quiztype == "enter" %}checked{% endif %}
+                            {% endif %}
+                        />
+                        <label for="enter">Enter Answer</label>
+                    </li>
+                </ul>
+            </div>
             <label class="create-label" for="category">Category:</label>
             <select id="category" name="category" onchange="saveSelected()">
                 {% for category in categories %}
@@ -111,30 +123,32 @@ Create Quiz
                             />
                             {% if quiztype == "bool" %}
                                 <h2 class="create-label">Answer:</h2>
-                                <input 
-                                    name="bool{{ i+1 }}"
-                                    id="true{{ i+1 }}"
-                                    type="radio" 
-                                    value="true"
-                                    {% if answers %}
-                                        {% if answers[i] == "true" %}
-                                            checked
+                                <div class="radio-buttons">
+                                    <input 
+                                        name="bool{{ i+1 }}"
+                                        id="true{{ i+1 }}"
+                                        type="radio" 
+                                        value="true"
+                                        {% if answers %}
+                                            {% if answers[i] == "true" %}
+                                                checked
+                                            {% endif %}
                                         {% endif %}
-                                    {% endif %}
-                                    >
-                                <label for="true{{ i+1 }}">True</label>
-                                <input 
-                                    name="bool{{ i+1 }}"
-                                    id="false{{ i+1 }}"
-                                    type="radio" 
-                                    value="false"
-                                    {% if answers %}
-                                        {% if answers[i] == "false" %}
-                                            checked
+                                        >
+                                    <label for="true{{ i+1 }}">True</label>
+                                    <input 
+                                        name="bool{{ i+1 }}"
+                                        id="false{{ i+1 }}"
+                                        type="radio" 
+                                        value="false"
+                                        {% if answers %}
+                                            {% if answers[i] == "false" %}
+                                                checked
+                                            {% endif %}
                                         {% endif %}
-                                    {% endif %}
-                                    >
-                                <label for="false{{ i+1 }}">False</label>
+                                        >
+                                    <label for="false{{ i+1 }}">False</label>
+                                </div>
                             {% endif %}
                             {% if quiztype == "enter" %}
                             <label class="create-label" for="answer{{ i+1 }}">Answer:</label> 
@@ -152,7 +166,7 @@ Create Quiz
                     {% if quiztype == "multi" %}
                         <div class="field-row">
                             {% for j in range(3) %}
-                                <label class="create-label" for="answer{{ i+1 }}_{{ j+1 }}">Answer {{ j+1 }}:</label> 
+                                <label class="create-label" for="answer{{ i+1 }}_{{ j+1 }}">Option {{ j+1 }}:</label>
                                 <input
                                     name="answer{{ i+1 }}_{{ j+1 }}"
                                     id="answer{{ i+1 }}_{{ j+1 }}"
@@ -168,19 +182,25 @@ Create Quiz
                         </div>
                         <div class="field-row">
                             <h2>Correct answer:</h2>
-                            {% for n in range(3) %}
-                                <label class="create-label" for="correct{{ i+1 }}_{{ n+1 }}">{{ n+1 }}:</label>
-                                <input
-                                    name="correct{{ i+1 }}"
-                                    id="correct{{ i+1 }}_{{ n+1 }}"
-                                    class="field"
-                                    type="radio"
-                                    value="{{ n+1 }}"
-                                    {% if correct_option and correct_option[i] == n+1 %}
+                            <div class="radio-buttons">
+                                <ul>
+                                    {% for n in range(3) %}
+                                        <li>
+                                            <input
+                                            name="correct{{ i+1 }}"
+                                            id="correct{{ i+1 }}_{{ n+1 }}"
+                                            class="field"
+                                            type="radio"
+                                            value="{{ n+1 }}"
+                                            {% if correct_option and correct_option[i] == n+1 %}
                                             checked
-                                    {% endif %}
-                                />
-                            {% endfor %}
+                                            {% endif %}
+                                            />
+                                            <label class="create-label" for="correct{{ i+1 }}_{{ n+1 }}">Option {{ n+1 }}</label>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
                         </div>
                     {% endif %}
                         </li>

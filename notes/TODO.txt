@@ -1,6 +1,8 @@
 
+
+
 To fix: 
-Remove autofill from Qs and As.
+
 
 Questions: replaced input type=text:
 <textarea name="message" rows="4" cols="50">
@@ -10,4 +12,4 @@ Enter text here...
 
 
 Git comment:
-Added if username check to signup- and login.html. Moved signup validation into helpers.py. Removed autofocus from signup- and login.html. Removed autocomplete from questions and answers.
+Create: Added ul and li to type selection. Changed radio buttons to look like real buttons.
