@@ -12,4 +12,4 @@ Enter text here...
 
 
 Git comment:
-Create: Added ul and li to type selection. Changed radio buttons to look like real buttons.
+Create: Cleaned up create.html, div layouts. Added generated item container. Started work on margins.

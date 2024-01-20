@@ -118,7 +118,6 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 600px;
   background-color: var(--lightgray);
   margin: 50px 0 10px 0;
   border-radius: 20px;
@@ -129,6 +128,10 @@ main {
 .center {
   justify-content: center;
   align-items: center;
+}
+
+form {
+  width: 100%;
 }
 
 /* Containers */
@@ -143,6 +146,15 @@ main {
   display: flex;
   flex-direction: row;
   width: 100%;
+}
+
+.field-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.generated-item_container {
+  margin: 20px 0;
 }
 
 .field-container {
@@ -176,9 +188,12 @@ input {
 }
 input:focus {
   background-color: rgb(233, 233, 233);
-  /* outline: 2px solid var(--pureblue); */
   box-shadow: 0 0 0 2px var(--pureblue);
   transition: all 0.5s;
+}
+
+.text-field {
+  width: 100%;
 }
 
 /* Buttons */
@@ -195,13 +210,8 @@ input:focus {
   transition: all 0.5s ease-out;
 }
 
-.radio-buttons ul {
-  list-style: none;
+.radio-buttons {
   display: flex;
-}
-
-.radio-buttons li {
-  white-space: nowrap;
 }
 
 .radio-buttons input[type="radio"] {
@@ -215,6 +225,7 @@ input:focus {
   color: black;
   cursor: pointer;
   user-select: none;
+  white-space: nowrap;
 }
 
 .radio-buttons input[type="radio"]:checked + label {
@@ -244,7 +255,7 @@ input:focus {
   margin: 0 4px 0 4px;
 }
 
-/* Profile */
+/* Profile page */
 .avatar-container {
   border: solid 3px white;
   border-radius: 100px;
@@ -264,9 +275,43 @@ input:focus {
   min-height: 50px;
 }
 
-/* Lists */
-.q-list {
-  list-style-type: none;
+/* Create page - All */
+.create_question-row {
   display: flex;
-  white-space: nowrap;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+/* Bool */
+.bool_answer-row {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+/* Multi */
+.multi_answer-row {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.multi_option-row {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+.multi_radio {
+  flex-direction: column;
+  justify-content: space-around;
+  height: 100%;
+}
+
+/* Enter */
+.enter_answer-row {
+  display: flex;
+  flex-direction: column;
+  width: 35%;
+  margin-left: 10px;
 }
