@@ -5,22 +5,26 @@ Create Quiz
 {% block main %}
 <h1>Create your own quiz!</h1>
 <form action="/create" method="POST">
-    <div class="field-row">
-        <label class="create-label" for="title">Title:</label>
-        <input
-            name="title"
-            id="title"
-            autocomplete="off"
-            class="text-field"
-            type="text"
-            value="{{ title }}"
-            maxlength="100"
-        />
-    </div>
-    <div class="field-row">
-        <div class="radio-buttons">
-                <div class="field-row">
-                        <h2 class="create-label">Type:</h2>
+    <div class="question-select_container">
+        <div class="question-select_row">
+            <div class="question-select_item">
+                <label class="create-label" for="title">Title:</label>
+                <input
+                    name="title"
+                    id="title"
+                    autocomplete="off"
+                    class="text-field"
+                    type="text"
+                    value="{{ title }}"
+                    maxlength="100"
+                />
+            </div>
+        </div>
+        <div class="question-select_row">
+            <div class="question-select_item">
+                <h2 class="create-label">Type:</h2>
+                <div class="radio-buttons">
+                    <div class="question-type-select_row">
                         <input
                             name="quiztype"
                             id="bool"
@@ -51,47 +55,53 @@ Create Quiz
                             {% endif %}
                         />
                         <label for="enter">Enter Answer</label>
+                    </div>
                 </div>
-        </div>
-        <label class="create-label" for="category">Category:</label>
-        <select id="category" name="category" onchange="saveSelected()">
-            {% for category in categories %}
-                <option value="{{ category }}">
-                    {{ category }}
-                </option>
-            {% endfor %}
-        </select>
-    </div>
-    <div class="field-row">
-        <label class="create-label" for="amount">Number of questions:</label>
-        <input
-            name="amount"
-            id="amount"
-            class="text-field"
-            type="number"
-            value="{{ amount }}"
-            placeholder="Max 30"
-        />
-        <label class="create-label" for="time">Time Limit:</label>
-        <input
-            name="time"
-            id="time"
-            class="text-field"
-            type="number"
-            value="{{ time }}"
-        />
-    </div>
-    {% with message = get_flashed_messages(category_filter=["failCreate"]) %} 
-        {% if message %}
-            <div class="field-row center">
-                <span class="failureMsg">
-                    <i class="fas fa-exclamation-triangle icon"></i>{{ message | join(" ") }}
-                </span>
             </div>
-        {% endif %}
-    {% endwith %}
-    <div class="field-row center">
-        <button class="field-btn" type="submit">Generate</button>
+            <div class="question-select_item">
+                <label class="create-label" for="category">Category:</label>
+                <select id="category" name="category" onchange="saveSelected()">
+                    {% for category in categories %}
+                        <option value="{{ category }}">
+                            {{ category }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="question-select_row">
+            <div class="question-select_item">
+                <label class="create-label" for="amount">Number of questions:</label>
+                <input
+                    name="amount"
+                    id="amount"
+                    class="text-field"
+                    type="number"
+                    value="{{ amount }}"
+                    placeholder="Max 30"
+                />
+                <label class="create-label" for="time">Time Limit:</label>
+                <input
+                    name="time"
+                    id="time"
+                    class="text-field"
+                    type="number"
+                    value="{{ time }}"
+                />
+            </div>
+        </div>
+        {% with message = get_flashed_messages(category_filter=["failCreate"]) %} 
+            {% if message %}
+                <div class="field-row center">
+                    <span class="failureMsg">
+                        <i class="fas fa-exclamation-triangle icon"></i>{{ message | join(" ") }}
+                    </span>
+                </div>
+            {% endif %}
+        {% endwith %}
+        <div class="field-row center">
+            <button class="field-btn" type="submit">Generate</button>
+        </div>
     </div>
 </form>
 <form action="/submit" method="POST">
@@ -100,7 +110,7 @@ Create Quiz
     {% for i in range(amount) %}
         <div class="generated-item_container">
             <div class="field-row">
-                <div class="create_question-row">
+                <div class="generated-question_row">
                     <label class="create-label" for="question{{ i+1 }}">Question {{ i+1 }}</label> 
                     <input
                     name="question{{ i+1 }}"
@@ -162,23 +172,25 @@ Create Quiz
             </div>
             {% if quiztype == "multi" %}
                 <div class="field-row">
-                    <div class="multi_answer-row">
+                    <div class="multi_answer-column">
                         <h2>Answers</h2>
-                        {% for j in range(3) %}
-                            <input
-                                name="answer{{ i+1 }}_{{ j+1 }}"
-                                id="answer{{ i+1 }}_{{ j+1 }}"
-                                class="text-field"
-                                type="text"
-                                autocomplete="off"
-                                maxlength="100"
-                                {% if answers %}
-                                    value="{{ answers[i][j] }}"
-                                {% endif %}
-                            />
-                        {% endfor %}
+                        <div class="multi_answer-column_inputs">
+                            {% for j in range(3) %}
+                                <input
+                                    name="answer{{ i+1 }}_{{ j+1 }}"
+                                    id="answer{{ i+1 }}_{{ j+1 }}"
+                                    class="text-field"
+                                    type="text"
+                                    autocomplete="off"
+                                    maxlength="100"
+                                    {% if answers %}
+                                        value="{{ answers[i][j] }}"
+                                    {% endif %}
+                                />
+                            {% endfor %}
+                        </div>
                     </div>
-                    <div class="multi_option-row">
+                    <div class="multi_option-column">
                         <h2>Correct</h2>
                         <div class="radio-buttons multi_radio">
                             {% for n in range(3) %}

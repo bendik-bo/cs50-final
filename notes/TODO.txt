@@ -12,4 +12,3 @@ Enter text here...
 
 
 Git comment:
-Create: Cleaned up create.html, div layouts. Added generated item container. Started work on margins.
