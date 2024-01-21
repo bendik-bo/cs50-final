@@ -11,7 +11,7 @@ CREATE TABLE images (
 );
 
 CREATE TABLE quizzes (
-	id INTEGER PRIMARY KEY,
+	id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 	title TEXT NOT NULL,
 	category TEXT,
 	creator_id INTEGER,
@@ -19,7 +19,7 @@ CREATE TABLE quizzes (
 );
 
 CREATE TABLE questions (
-	id INTEGER PRIMARY KEY,
+	id INTEGER PRIMARY KEY NOT NULL,
 	quiz_id INTEGER NOT NULL,
 	question TEXT NOT NULL,
 	FOREIGN KEY (quiz_id) REFERENCES quizzes(id)	

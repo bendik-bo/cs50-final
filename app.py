@@ -2,7 +2,7 @@ import sqlite3
 import os
 from os import path
 
-from flask import Flask, flash, redirect, render_template, request, session, g
+from flask import Flask, flash, redirect, render_template, url_for, request, session, g
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
@@ -316,8 +316,29 @@ def submit():
         flash(f"An error occured when updating database: {e}", "failCreate")
         return redirect("/create")
 
-    
-    return render_template("create.html")
+    return redirect(url_for("display_quiz", quiz_id=quiz_id))
 
-if __name__ == "__main__":
-    app.run(debug=True)
+@app.route("/quiz/<int:quiz_id>")
+@login_required
+def display_quiz(quiz_id):
+
+    result = query_db("SELECT * FROM quizzes where id = ?", [quiz_id])
+    quiz_data = result[0]
+
+    quiz_data["questions"] = query_db("SELECT * FROM questions WHERE quiz_id = ?", [quiz_id])
+
+    for question in quiz_data["questions"]:
+        question_id = question["id"]
+        answers = query_db("SELECT * FROM answers WHERE question_id = ?", [question_id])
+        quiz_data["questions"][question].append(answers)
+
+    print(quiz_data["questions"][0]["answers"][0])
+        
+
+    return redirect("/")
+
+
+
+
+# if __name__ == "__main__":
+#     app.run(debug=True)
