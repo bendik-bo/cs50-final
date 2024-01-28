@@ -326,7 +326,7 @@ def display_quiz(quiz_id):
     quiz_info = dict(result[0])
 
     quiz_content = []
-    result = query_db("SELECT question, id FROM questions WHERE quiz_id = ?", [quiz_id])
+    result = query_db("SELECT id, question FROM questions WHERE quiz_id = ?", [quiz_id])
 
     for row in result:
         question = dict(row)
@@ -334,16 +334,6 @@ def display_quiz(quiz_id):
         question["answer"] = [dict(answer) for answer in answers]
         quiz_content.append(question)
         
-
-
-    print(quiz_content)
-
-    # for question in quiz_content["questions"]:
-    #     question_id = question["id"]
-    #     answers = query_db("SELECT * FROM answers WHERE question_id = ?", [question_id])
-    #     quiz_data["questions"][question].append(answers)
-
-    # print(quiz_data["questions"][0]["answers"][0])
         
 
     return render_template("create.html")
