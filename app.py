@@ -323,13 +323,20 @@ def submit():
 def display_quiz(quiz_id):
 
     result = query_db("SELECT * FROM quizzes where id = ?", [quiz_id])
-    quiz_info = result[0]
+    quiz_info = dict(result[0])
 
-    quiz_content = {}
-    quiz_content["questions"] = dict(query_db("SELECT * FROM questions WHERE quiz_id = ?", [quiz_id]))
+    quiz_content = []
+    result = query_db("SELECT question, id FROM questions WHERE quiz_id = ?", [quiz_id])
 
-    for i in quiz_content["questions"]:
-        print(i)
+    for row in result:
+        question = dict(row)
+        answers = query_db("SELECT answer, is_correct FROM answers WHERE question_id = ?", [question["id"]])
+        question["answer"] = [dict(answer) for answer in answers]
+        quiz_content.append(question)
+        
+
+
+    print(quiz_content)
 
     # for question in quiz_content["questions"]:
     #     question_id = question["id"]
@@ -339,7 +346,7 @@ def display_quiz(quiz_id):
     # print(quiz_data["questions"][0]["answers"][0])
         
 
-    return redirect("/")
+    return render_template("create.html")
 
 
 

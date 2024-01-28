@@ -14,27 +14,3 @@ Enter text here...
 
 
 Git comment:
-
-
-    result = query_db("SELECT * FROM quizzes WHERE id = ?", [quiz_id])
-    quiz_data = result[0] if result else None
-
-    if not quiz_data:
-        # Handle the case where no quiz is found
-        return "Quiz not found", 404
-
-    # Convert quiz_data to a dictionary if it's not already one
-    quiz_data = dict(quiz_data)
-
-    # Get questions and convert them into dictionaries
-    questions = query_db("SELECT * FROM questions WHERE quiz_id = ?", [quiz_id])
-    quiz_questions = [dict(question) for question in questions]
-
-    for question in quiz_questions:
-        question_id = question["id"]
-        answers = query_db("SELECT * FROM answers WHERE question_id = ?", [question_id])
-        question["answers"] = [dict(answer) for answer in answers]
-
-    quiz_data["questions"] = quiz_questions
-
-    print(quiz_data["questions"][0]["answers"][0])
