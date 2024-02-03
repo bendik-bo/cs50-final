@@ -316,15 +316,21 @@ def submit():
         flash(f"An error occured when updating database: {e}", "failCreate")
         return redirect("/create")
 
-    return redirect(url_for("display_quiz", quiz_id=quiz_id))
+    return redirect(url_for("quiz_intro", quiz_id=quiz_id))
 
-@app.route("/quiz/<int:quiz_id>")
+@app.route("/quiz/<int:quiz_id>/intro")
 @login_required
-def display_quiz(quiz_id):
+def quiz_intro (quiz_id):
 
     result = query_db("SELECT * FROM quizzes where id = ?", [quiz_id])
     quiz_info = dict(result[0])
+        
+    print(quiz_info)
+    return render_template("quiz-intro.html", quiz_info=quiz_info)
 
+@app.route("/start_quiz")
+@login_required
+def start_quiz():
     quiz_content = []
     result = query_db("SELECT id, question FROM questions WHERE quiz_id = ?", [quiz_id])
 
@@ -333,13 +339,13 @@ def display_quiz(quiz_id):
         answers = query_db("SELECT answer, is_correct FROM answers WHERE question_id = ?", [question["id"]])
         question["answer"] = [dict(answer) for answer in answers]
         quiz_content.append(question)
-        
-        
 
-    return render_template("create.html")
+    return redirect(url_for(quiz_start))
+
+# @app.route("/quiz/<int:quiz_id/start")
+# @login_required
+# def quiz_start(quiz_id):
 
 
-
-
-# if __name__ == "__main__":
-#     app.run(debug=True)
+if __name__ == "__main__":
+    app.run(debug=True)
