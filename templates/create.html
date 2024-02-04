@@ -15,7 +15,9 @@ Create Quiz
                     autocomplete="off"
                     class="text-field"
                     type="text"
-                    value="{{ title }}"
+                    {% if quiz_data %}
+                        value="{{ quiz_data['title'] }}"
+                    {% endif %}
                     maxlength="100"
                 />
             </div>
@@ -30,8 +32,8 @@ Create Quiz
                             id="bool"
                             type="radio"
                             value="bool"
-                            {% if quiztype %}
-                                {% if quiztype == "bool" %}checked{% endif %}
+                            {% if quiz_data %}
+                                {% if quiz_data['quiztype'] == "bool" %}checked{% endif %}
                             {% endif %}
                         />
                         <label for="bool">True/False</label>
@@ -40,8 +42,8 @@ Create Quiz
                             id="multi"
                             type="radio"
                             value="multi"
-                            {% if quiztype %}
-                                {% if quiztype == "multi" %}checked{% endif %}
+                            {% if quiz_data %}
+                                {% if quiz_data['quiztype'] == "multi" %}checked{% endif %}
                             {% endif %}
                         />  
                         <label for="multi">Multiple Options</label>
@@ -50,8 +52,8 @@ Create Quiz
                             id="enter"
                             type="radio"
                             value="enter"
-                            {% if quiztype %}
-                                {% if quiztype == "enter" %}checked{% endif %}
+                            {% if quiz_data %}
+                                {% if quiz_data['quiztype'] == "enter" %}checked{% endif %}
                             {% endif %}
                         />
                         <label for="enter">Enter Answer</label>
@@ -77,7 +79,9 @@ Create Quiz
                     id="amount"
                     class="text-field"
                     type="number"
-                    value="{{ amount }}"
+                    {% if quiz_data %}
+                        value="{{ quiz_data['question_amount'] }}"
+                    {% endif %}
                     placeholder="Max 30"
                 />
                 <label class="create-label" for="time">Time Limit:</label>
@@ -107,7 +111,7 @@ Create Quiz
 <form action="/submit" method="POST">
 {% if generate_questions %}
     <hr>
-    {% for i in range(amount) %}
+    {% for i in range(quiz_data['question_amount']) %}
         <div class="generated-item_container">
             <div class="field-row">
                 <div class="generated-question_row">
@@ -124,7 +128,7 @@ Create Quiz
                     {% endif %}
                     />
                 </div>
-                {% if quiztype == "bool" %}
+                {% if quiz_data['quiztype'] == "bool" %}
                     <div class="bool_answer-row">
                         <h2 class="create-label">Answer:</h2>
                         <div class="radio-buttons">
@@ -155,7 +159,7 @@ Create Quiz
                         </div>
                     </div>
                 {% endif %}
-                {% if quiztype == "enter" %}
+                {% if quiz_data['quiztype'] == "enter" %}
                     <div class="enter_answer-row">
                         <label class="create-label" for="answer{{ i+1 }}">Answer</label> 
                         <input
@@ -170,7 +174,7 @@ Create Quiz
                     </div>
                 {% endif %}
             </div>
-            {% if quiztype == "multi" %}
+            {% if quiz_data['quiztype'] == "multi" %}
                 <div class="field-row">
                     <div class="multi_answer-column">
                         <h2>Answers</h2>

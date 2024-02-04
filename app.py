@@ -221,30 +221,26 @@ def upload():
 @login_required
 def create():
     if request.method == "POST":
-        title = request.form.get("title")
-        quiztype = request.form.get("quiztype")
-        category = request.form.get("category")
-        amount = request.form.get("amount")
-        time = request.form.get("time")
+        quiz_data = {
+            "title": request.form.get("title"),
+            "quiztype": request.form.get("quiztype"),
+            "category": request.form.get("category"),
+            "question_amount": request.form.get("amount"),
+            "time": request.form.get("time")
+        }
 
-
-        if amount:
+        if quiz_data["question_amount"]:
             try: 
-                amount = int(amount)
+                quiz_data["question_amount"] = int(quiz_data["question_amount"])
             except ValueError:
                 flash("Invalid datatype in 'number of questions'.", "failCreate")
-                return render_template("create.html", title=title, quiztype=quiztype, categories=CATEGORIES)
+                return render_template("create.html", quiz_data=quiz_data, categories=CATEGORIES)
 
-        if not validate_create(title, quiztype, amount):
-            return render_template("create.html", title=title, quiztype=quiztype, amount=amount, categories=CATEGORIES)
+        if not validate_create(quiz_data["title"], quiz_data["quiztype"], quiz_data["question_amount"]):
+            return render_template("create.html", quiz_data=quiz_data, categories=CATEGORIES)
         else:
-            session["quiz_data"] = {
-                "title": title,
-                "category": category,
-                "type": quiztype,
-                "amount": amount
-            }
-            return render_template("create.html", title=title, quiztype=quiztype, amount=amount, categories=CATEGORIES, generate_questions=True)
+            session["quiz_data"] = quiz_data
+            return render_template("create.html", quiz_data=quiz_data, categories=CATEGORIES, generate_questions=True)
     else: 
         return render_template("create.html", categories=CATEGORIES)
 
@@ -259,19 +255,19 @@ def submit():
     answers = []
     correct_option = []
 
-    for i in range(quiz_data["amount"]):
+    for i in range(quiz_data["question_amount"]):
         questions.append(request.form.get(f"question{i+1}"))
 
-    if quiz_data["type"] == "bool":
-        for i in range(quiz_data["amount"]):
+    if quiz_data["quiztype"] == "bool":
+        for i in range(quiz_data["question_amount"]):
             answers.append(request.form.get(f"bool{i+1}"))
 
-    elif quiz_data["type"] == "enter":
-        for i in range(quiz_data["amount"]):
+    elif quiz_data["quiztype"] == "enter":
+        for i in range(quiz_data["question_amount"]):
             answers.append(request.form.get(f"answer{i+1}"))
 
-    elif quiz_data["type"] == "multi":
-        for i in range(quiz_data["amount"]):
+    elif quiz_data["quiztype"] == "multi":
+        for i in range(quiz_data["question_amount"]):
             answers_ = []
             for j in range(3):
                 answers_.append(request.form.get(f"answer{i+1}_{j+1}"))
@@ -282,10 +278,8 @@ def submit():
                 correct_option.append(None)
 
                 
-    if not validate_submit(quiz_data["amount"], questions, quiz_data["type"], answers, correct_option):
-        return render_template("create.html", amount=quiz_data["amount"], quiztype=quiz_data["type"], title=quiz_data["title"], categories=CATEGORIES, questions=questions, answers=answers, generate_questions=True, correct_option=correct_option)
-
-    session.pop("quiz_data", None)
+    if not validate_submit(quiz_data["question_amount"], questions, quiz_data["quiztype"], answers, correct_option):
+        return render_template("create.html", quiz_data=quiz_data, categories=CATEGORIES, questions=questions, answers=answers, generate_questions=True, correct_option=correct_option)
 
     try:
         db = get_db()
@@ -293,16 +287,16 @@ def submit():
 
         quiz_id = insert_db(db, "INSERT INTO quizzes (title, category, creator_id) VALUES (?, ?, ?)", [quiz_data["title"], quiz_data["category"], session["user_id"]])
 
-        for i in range(quiz_data["amount"]):
+        for i in range(quiz_data["question_amount"]):
             question_id = insert_db(db, "INSERT INTO questions (quiz_id, question) VALUES (?, ?)", [quiz_id, questions[i]])
             
-            if quiz_data["type"] == "multi":
+            if quiz_data["quiztype"] == "multi":
                 for j in range(3):
                     if j+1 == correct_option[i]:
                         insert_db(db, "INSERT INTO answers (question_id, answer, is_correct) VALUES (?, ?, ?)", [question_id, answers[i][j], 1])
                     else:
                         insert_db(db, "INSERT INTO answers (question_id, answer, is_correct) VALUES (?, ?, ?)", [question_id, answers[i][j], 0])
-            elif quiz_data["type"] == "bool":
+            elif quiz_data["quiztype"] == "bool":
                 if answers[i] == "true":
                     insert_db(db, "INSERT INTO answers (question_id, is_correct) VALUES (?, ?)", [question_id, 1])
                 else:
@@ -318,19 +312,19 @@ def submit():
 
     return redirect(url_for("quiz_intro", quiz_id=quiz_id))
 
-@app.route("/quiz/<int:quiz_id>/intro")
+@app.route("/quiz/<int:quiz_id>/intro", methods=["GET", "POST"])
 @login_required
-def quiz_intro (quiz_id):
+def quiz_intro(quiz_id):
 
-    result = query_db("SELECT * FROM quizzes where id = ?", [quiz_id])
-    quiz_info = dict(result[0])
-        
-    print(quiz_info)
-    return render_template("quiz-intro.html", quiz_info=quiz_info)
+    if request.method == "POST":
+        return redirect(url_for("quiz_start", quiz_id=quiz_id, quiz_data=session["quiz_data"]))
+    else:
+        return render_template("quiz-intro.html", quiz_data=session["quiz_data"])
 
-@app.route("/start_quiz")
+
+@app.route("/quiz_start")
 @login_required
-def start_quiz():
+def quiz_start(quiz_id):
     quiz_content = []
     result = query_db("SELECT id, question FROM questions WHERE quiz_id = ?", [quiz_id])
 

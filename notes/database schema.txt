@@ -13,7 +13,9 @@ CREATE TABLE images (
 CREATE TABLE quizzes (
 	id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 	title TEXT NOT NULL,
+	type TEXT,
 	category TEXT,
+	question_amount INTEGER,
 	creator_id INTEGER,
 	FOREIGN KEY (creator_id) REFERENCES users(id)
 );
