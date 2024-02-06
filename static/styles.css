@@ -34,7 +34,7 @@ h1 {
   margin-bottom: 15px;
 }
 
-h2 {
+h3 {
   color: white;
   font-size: 1rem;
 }
@@ -159,7 +159,10 @@ form {
   margin-bottom: 5px;
 }
 
-
+.creator-container {
+  display: flex;
+  justify-content: flex-end;
+}
 
 /* Create page */
 .question-select_row {

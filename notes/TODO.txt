@@ -1,9 +1,9 @@
-
+Creator img doesnt show on quiz intro
 
 
 To fix: 
 - Move validation in /changepass to helpers.py
-- Datatransfer: Signup, login, create into dicts, instead of individual variables
+- question-select info doesn't update when changed after pressing generate, and then submit
 
 
 Questions: replaced input type=text:

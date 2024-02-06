@@ -2,7 +2,17 @@
 
 {% block title %} Quiz {% endblock %}
 
-{% block main%}
-    <h1>Welcome to the index</h1>
+{% block main %}
+<div class="field-column">
+    <div class="creator-container">
+        <img src="{{ url }}">
+        <p>{{ creator_name }}</p>
+    </div>
+    <h2>{{ quiz_data["title"] }}</h2>
+    <div class="field-row">
+
+    </div>
+</div>
+
 {% endblock %}
     

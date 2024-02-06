@@ -281,11 +281,13 @@ def submit():
     if not validate_submit(quiz_data["question_amount"], questions, quiz_data["quiztype"], answers, correct_option):
         return render_template("create.html", quiz_data=quiz_data, categories=CATEGORIES, questions=questions, answers=answers, generate_questions=True, correct_option=correct_option)
 
+    session.pop("quiz_data", None)
+
     try:
         db = get_db()
         db.execute('BEGIN')
 
-        quiz_id = insert_db(db, "INSERT INTO quizzes (title, category, creator_id) VALUES (?, ?, ?)", [quiz_data["title"], quiz_data["category"], session["user_id"]])
+        quiz_id = insert_db(db, "INSERT INTO quizzes (title, type, category, question_amount, creator_id) VALUES (?, ?, ?, ?, ?)", [quiz_data["title"], quiz_data["quiztype"], quiz_data["category"], quiz_data["question_amount"], session["user_id"]])
 
         for i in range(quiz_data["question_amount"]):
             question_id = insert_db(db, "INSERT INTO questions (quiz_id, question) VALUES (?, ?)", [quiz_id, questions[i]])
@@ -317,9 +319,21 @@ def submit():
 def quiz_intro(quiz_id):
 
     if request.method == "POST":
-        return redirect(url_for("quiz_start", quiz_id=quiz_id, quiz_data=session["quiz_data"]))
+        return redirect(url_for("quiz_start", quiz_id=quiz_id))
     else:
-        return render_template("quiz-intro.html", quiz_data=session["quiz_data"])
+        result = query_db("SELECT * FROM quizzes WHERE id = ?", [quiz_id])
+        quiz_data = dict(result[0])
+
+        result = query_db("SELECT username FROM users WHERE id = ?", [quiz_data["creator_id"]], one=True)
+        creator_name = result[0]
+        
+        result = query_db("SELECT url FROM images WHERE user_id = ?", [quiz_data["creator_id"]], one=True)
+        creator_img_url = result["url"]
+
+        print(creator_img_url)
+        print(type(creator_img_url))
+
+        return render_template("quiz-intro.html", quiz_data=quiz_data, url=creator_img_url, creator_name=creator_name)
 
 
 @app.route("/quiz_start")

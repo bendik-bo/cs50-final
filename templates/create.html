@@ -24,7 +24,7 @@ Create Quiz
         </div>
         <div class="question-select_row">
             <div class="question-select_item">
-                <h2 class="create-label">Type:</h2>
+                <h3 class="create-label">Type:</h3>
                 <div class="radio-buttons">
                     <div class="question-type-select_row">
                         <input
@@ -132,7 +132,7 @@ Create Quiz
                 </div>
                 {% if quiz_data['quiztype'] == "bool" %}
                     <div class="bool_answer-row">
-                        <h2 class="create-label">Answer:</h2>
+                        <h3 class="create-label">Answer:</h3>
                         <div class="radio-buttons">
                             <input 
                                 name="bool{{ i+1 }}"
@@ -179,7 +179,7 @@ Create Quiz
             {% if quiz_data['quiztype'] == "multi" %}
                 <div class="field-row">
                     <div class="multi_answer-column">
-                        <h2>Answers</h2>
+                        <h3>Answers</h3>
                         <div class="multi_answer-column_inputs">
                             {% for j in range(3) %}
                                 <input
@@ -197,7 +197,7 @@ Create Quiz
                         </div>
                     </div>
                     <div class="multi_option-column">
-                        <h2>Correct</h2>
+                        <h3>Correct</h3>
                         <div class="radio-buttons multi_radio">
                             {% for n in range(3) %}
                                     <input
