@@ -5,7 +5,7 @@ Create Quiz
 {% block main %}
 <h1>Create your own quiz!</h1>
 <form action="/create" method="POST">
-    <div class="question-select_container">
+    <div class="field-column">
         <div class="question-select_row">
             <div class="question-select_item">
                 <label class="create-label" for="title">Title:</label>
@@ -84,6 +84,8 @@ Create Quiz
                     {% endif %}
                     placeholder="Max 30"
                 />
+            </div>
+            <div class="question-select_item">
                 <label class="create-label" for="time">Time Limit:</label>
                 <input
                     name="time"
@@ -94,18 +96,18 @@ Create Quiz
                 />
             </div>
         </div>
+        <div class="question-select_item center">
+            <button class="field-btn" type="submit">Generate</button>
+        </div>
         {% with message = get_flashed_messages(category_filter=["failCreate"]) %} 
             {% if message %}
-                <div class="field-row center">
+                <div class="question-select_item center">
                     <span class="failureMsg">
                         <i class="fas fa-exclamation-triangle icon"></i>{{ message | join(" ") }}
                     </span>
                 </div>
             {% endif %}
         {% endwith %}
-        <div class="field-row center">
-            <button class="field-btn" type="submit">Generate</button>
-        </div>
     </div>
 </form>
 <form action="/submit" method="POST">
